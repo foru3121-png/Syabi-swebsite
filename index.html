@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syabi's.com</title>
+<style>
+:root{--green:#087f5b;--dark:#075c45;--bg:#f3f7f5;--card:#fff;--text:#172b24;--muted:#63756d;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
+header{background:linear-gradient(120deg,var(--dark),#10a875);color:#fff;padding:22px 18px;text-align:center}
+header h1{margin:0;font-size:28px}header p{margin:8px 0 0;font-size:14px}
+main{max-width:480px;margin:22px auto;padding:0 14px}.card{background:var(--card);padding:20px;border-radius:16px;box-shadow:0 5px 22px #0b3b2712;margin-bottom:15px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}.tabs button{flex:1}
+button{border:0;border-radius:10px;background:var(--green);color:white;padding:13px 15px;font-weight:700;cursor:pointer}
+button.secondary{background:#e5f3ed;color:var(--dark)}button:disabled{opacity:.55}
+input{width:100%;padding:13px;margin:7px 0 12px;border:1px solid #d5e1db;border-radius:9px;font-size:15px}
+label{font-size:13px;font-weight:700;color:#40554b}
+.hidden{display:none!important}.note{font-size:12px;color:var(--muted);line-height:1.5}.status{padding:12px;border-radius:9px;background:#fff4d6;color:#805600;margin:12px 0}
+.error{color:var(--red);font-size:13px;white-space:pre-wrap}.success{color:var(--dark);font-size:13px}
+a{color:var(--dark);font-weight:700}.row{display:flex;gap:8px}.row button{flex:1}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header><h1>Welcome to Syabi's.com</h1><p>Referral rewards, team management and withdrawal requests in one simple platform.</p></header>
+<main>
+<section id="authCard" class="card">
+  <div class="tabs"><button id="showRegister">Register</button><button id="showLogin" class="secondary">Login</button></div>
+  <div id="registerBox">
+    <h2>Create account</h2>
+    <label>Full name</label><input id="regName" autocomplete="name" placeholder="Your name">
+    <label>Gmail address</label><input id="regEmail" type="email" autocomplete="email" placeholder="name@gmail.com">
+    <label>Password</label><input id="regPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+    <label>Referral code</label><input id="regReferral" placeholder="Required except for the first account">
+    <button id="registerBtn" style="width:100%">Create Account</button>
+    <p class="note">The first registered account can leave the referral code blank. Later accounts must use a valid code. The server-side referral check will be enabled with the secure backend deployment.</p>
+  </div>
+  <div id="loginBox" class="hidden">
+    <h2>Login</h2>
+    <label>Gmail address</label><input id="loginEmail" type="email" autocomplete="email" placeholder="name@gmail.com">
+    <label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password">
+    <button id="loginBtn" style="width:100%">Login</button>
+  </div>
+  <p id="authMessage" class="error"></p>
+  <p class="note"><a id="accountHelp" href="#" target="_blank" rel="noopener">How to Create an Account</a> · <a href="https://www.youtube.com/" target="_blank" rel="noopener">Video link not set</a></p>
+</section>
+
+<section id="paymentCard" class="card hidden">
+  <h2>Payment verification</h2>
+  <p>Required payment: <b>Rs. 150</b></p>
+  <p>Method: <b>UPaisa</b></p>
+  <p>Account number: <b id="payNumber">03329305255</b></p>
+  <p>Account holder: <b>HABIBULLAH</b></p>
+  <button id="copyNumber" class="secondary">Copy Number</button>
+  <div class="status">Your account is awaiting payment verification. Upload receipt submission will be available after Firebase Storage is configured.</div>
+  <button id="logoutPending" class="secondary">Logout</button>
+</section>
+
+<section id="userCard" class="card hidden">
+  <h2 id="welcomeUser">Welcome</h2><p id="accountState" class="status"></p>
+  <p>Your account is signed in. The full wallet, team and withdrawal features will be added after the secure backend is deployed.</p>
+  <button id="logoutUser" style="width:100%">Logout</button>
+</section>
+</main>
+<footer>Syabi's.com · Secure account access</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAoQPsWcpedaMO00MsWCnahueC46Ec2Kk8",
+  authDomain: "syabi-scom.firebaseapp.com",
+  projectId: "syabi-scom",
+  storageBucket: "syabi-scom.firebasestorage.app",
+  messagingSenderId: "418463227638",
+  appId: "1:418463227638:web:e08d2426f6404005bf16d7",
+  measurementId: "G-6JXBXKPTRW"
+};
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
+const $=id=>document.getElementById(id);
+function message(t,ok=false){$("authMessage").textContent=t;$("authMessage").className=ok?"success":"error";}
+function tab(which){$("registerBox").classList.toggle("hidden",which!=="register");$("loginBox").classList.toggle("hidden",which!=="login");$("showRegister").classList.toggle("secondary",which!=="register");$("showLogin").classList.toggle("secondary",which!=="login");message("");}
+$("showRegister").onclick=()=>tab("register");$("showLogin").onclick=()=>tab("login");
+async function renderUser(user){
+  ["authCard","paymentCard","userCard"].forEach(id=>$(id).classList.add("hidden"));
+  if(!user){$("authCard").classList.remove("hidden");return;}
+  try{
+    const snap=await getDoc(doc(db,"users",user.uid));
+    if(!snap.exists()){$("paymentCard").classList.remove("hidden");$("paymentCard").querySelector(".status").textContent="Your profile setup is incomplete. Please contact support.";return;}
+    const data=snap.data();
+    if(data.status==="blocked"){await signOut(auth);message("This account is blocked. Contact support.");$("authCard").classList.remove("hidden");return;}
+    if(data.status!=="active"){$("paymentCard").classList.remove("hidden");return;}
+    $("welcomeUser").textContent="Welcome, "+(data.name||user.displayName||"Member");
+    $("accountState").textContent="Account status: Active";
+    $("userCard").classList.remove("hidden");
+  }catch(e){$("authCard").classList.remove("hidden");message("Could not load account: "+e.message);}
+}
+$("registerBtn").onclick=async()=>{
+  const name=$("regName").value.trim(),email=$("regEmail").value.trim(),password=$("regPassword").value,referral=$("regReferral").value.trim();
+  if(!name||!email||!password){message("Please enter name, Gmail and password.");return;}
+  if(password.length<6){message("Password must contain at least 6 characters.");return;}
+  if(!email.toLowerCase().endsWith("@gmail.com")){message("Please use a Gmail address.");return;}
+  if(!referral){message("Referral validation and first-user detection must be completed by the secure backend before public registration is enabled.");return;}
+  try{
+    $("registerBtn").disabled=true;
+    const cred=await createUserWithEmailAndPassword(auth,email,password);
+    await updateProfile(cred.user,{displayName:name});
+    // Profile creation is intentionally not performed by the browser.
+    // The callable Cloud Function will validate referral codes and create protected records.
+    message("Authentication account created. Secure profile setup is not deployed yet. Do not make a payment until the backend is ready.",true);
+    await signOut(auth);
+  }catch(e){message(e.message);}finally{$("registerBtn").disabled=false;}
+};
+$("loginBtn").onclick=async()=>{
+  try{$("loginBtn").disabled=true;await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value);message("");}
+  catch(e){message(e.message);}finally{$("loginBtn").disabled=false;}
+};
+$("copyNumber").onclick=async()=>{try{await navigator.clipboard.writeText("03329305255");$("copyNumber").textContent="Copied!";}catch(e){message("Please copy the number manually.");}};
+$("logoutPending").onclick=()=>signOut(auth);$("logoutUser").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,renderUser);
+</script>
+</body></html>
