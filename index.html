@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syabi's.com</title>
+<style>
+:root{--green:#087f5b;--light:#e9f7f1;--dark:#12372b;--white:#fff;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#18332a}
+header{background:var(--green);color:white;padding:18px 16px;text-align:center}
+header h1{margin:0;font-size:25px}header p{margin:7px 0 0;font-size:14px}
+nav{display:flex;gap:7px;overflow-x:auto;padding:10px;background:white;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #0001}
+nav button,.btn{border:0;border-radius:9px;padding:11px 14px;background:var(--green);color:white;font-weight:600;white-space:nowrap;cursor:pointer}
+nav button{background:var(--light);color:var(--dark)}nav button.active{background:var(--green);color:white}
+main{max-width:900px;margin:18px auto;padding:0 13px}.page{display:none}.page.active{display:block}
+.card{background:white;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 3px 14px #143b2c0d}
+h2{margin:0 0 14px;color:var(--dark)}h3{margin:8px 0;color:var(--dark)}
+label{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5d1;border-radius:8px;font-size:15px;background:white}
+.btn{display:inline-block;margin-top:12px;text-decoration:none}.btn.secondary{background:#e5f4ed;color:var(--dark)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.stat{background:var(--light);padding:15px;border-radius:11px}.stat b{display:block;font-size:22px;margin-top:6px}
+.note{background:#fff7df;border-left:4px solid #e6a700;padding:12px;border-radius:7px;font-size:13px;line-height:1.5}
+.muted{color:var(--muted);font-size:13px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px;border-bottom:1px solid #e5e7eb}
+.hidden{display:none!important}.auth-tabs{display:flex;gap:8px;margin-bottom:12px}.auth-tabs button{flex:1;border:0;border-radius:8px;padding:11px;background:#e5f4ed;color:#12372b;font-weight:bold}.auth-tabs button.active{background:#087f5b;color:white}.auth-form{display:none}.auth-form.active{display:block}.status{font-weight:bold;color:#b7791f}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+@media(max-width:520px){header h1{font-size:22px}.card{padding:15px}th,td{padding:7px;font-size:12px}}
+</style>
+</head>
+<body>
+<header><h1>Welcome to Syabi's.com</h1><p>Referral Rewards • Team Management • Wallet</p></header>
+<nav id="nav" class="hidden">
+<button class="active" data-page="home">Home</button><button data-page="payment">Payment</button>
+<button data-page="team">My Team</button><button data-page="wallet">Wallet</button><button data-page="profile">Profile</button>
+<button data-page="admin">Admin Panel</button><button id="navLogout">Logout</button>
+</nav>
+<main>
+<section id="start" class="page active">
+<div class="card"><h2>Welcome to Syabi's.com</h2><p>Join our referral rewards platform to manage your team, view your wallet and submit withdrawal requests.</p>
+<a class="btn" href="#" id="createVideo">How to Create an Account</a></div>
+<div class="card"><h2>Account Access</h2>
+<div class="auth-tabs"><button id="showLogin" class="active">Login</button><button id="showRegister">Register</button></div>
+<div id="loginForm" class="auth-form active">
+<label>Gmail</label><input id="loginEmail" type="email" placeholder="name@gmail.com">
+<label>Password</label><input id="loginPass" type="password" placeholder="Password">
+<button class="btn" id="loginBtn">Login</button>
+</div>
+<div id="registerForm" class="auth-form">
+<label>Name</label><input id="regName" placeholder="Your name">
+<label>Gmail</label><input id="regEmail" type="email" placeholder="name@gmail.com">
+<label>Password</label><input id="regPass" type="password" placeholder="Password">
+<label>Referral Code</label><input id="regRef" placeholder="Referral code (leave blank for first user)">
+<button class="btn" id="registerBtn">Register</button>
+</div>
+</div>
+<div class="card"><h3>Administrator</h3><button class="btn secondary" id="startAdmin">Admin Panel Login</button></div>
+<div class="note">This is a front-end preview only. Real account authentication, payment verification, admin security and wallet transactions require a connected secure backend.</div>
+</section>
+<section id="home" class="page"><div class="card"><h2>Welcome to Syabi's.com</h2><p>Syabi's.com is an online referral rewards platform where members can invite others, build teams, track referral rewards, manage their wallet and request withdrawals. Our goal is to provide a simple experience with clear account information and transparent request statuses.</p><a class="btn" href="#" id="earnVideo">How to Earn Money</a></div></section>
+<section id="payment" class="page"><div class="card"><h2>Payment Verification</h2><div class="stat">Required Payment <b>Rs. 150</b></div><p><b>Method:</b> UPaisa</p><p><b>Account Number:</b> <span id="payNumber">03329305255</span></p><p><b>Account Holder:</b> HABIBULLAH</p><button class="btn secondary" id="copyNumber">Copy Number</button>
+<label>Upload payment receipt screenshot</label><input type="file" id="receipt" accept="image/*"><button class="btn" id="paymentSubmit">Submit Request</button><p id="paymentStatus" class="status"></p></div></section>
+<section id="team" class="page"><div class="card"><h2>My Team</h2><p>Your Referral Code: <b id="myCode">SYABI-DEMO</b></p><button class="btn secondary" id="copyCode">Copy Referral Code</button><div class="stat" style="margin-top:14px">Total Team Members <b id="teamCount">0</b></div><h3>Team Members</h3><div id="teamList" class="muted">No team members shown in preview.</div><a class="btn" href="#" id="teamVideo">How to Make a Team</a></div></section>
+<section id="wallet" class="page"><div class="card"><h2>Wallet</h2><div class="stat">Total Balance <b id="balance">Rs. 0</b></div><div class="grid" style="margin-top:12px"><div class="stat">Today's Earnings<b>Rs. 0</b></div><div class="stat">Last Week's Earnings<b>Rs. 0</b></div><div class="stat">Last Month's Earnings<b>Rs. 0</b></div></div><h3>Withdrawal Request</h3><label>Payment Method</label><select id="method"><option>EasyPaisa</option><option>JazzCash</option><option>UPaisa</option></select><label>Account Number</label><input id="withdrawNumber"><label>Account Holder Name</label><input id="withdrawName"><label>Amount (Rs. 100–300)</label><input id="withdrawAmount" type="number" min="100" max="300"><button class="btn" id="withdrawBtn">Withdraw</button><h3>Withdrawal History</h3><div id="history" class="muted">No withdrawal requests.</div><a class="btn" href="#" id="withdrawVideo">How to Withdraw Money</a></div></section>
+<section id="profile" class="page"><div class="card"><h2>Profile</h2><label>User Name</label><input id="profileName" placeholder="Your name"><button class="btn secondary" id="saveName">Save Name</button><p>Gmail: <span id="profileEmail">Not logged in</span></p><h3>About Website</h3><p>Syabi's.com helps members learn about referral-based rewards, invite new users through personal referral codes, build and manage teams, and view eligible earnings in one place. Members can review wallet information, submit withdrawal requests through supported payment methods, and track the status of each request. The platform is designed to make referral activity and account information easy to understand. Payment and withdrawal requests are subject to verification and the platform's rules. Always verify payment details through the official Help Center before sending money.</p><h3>Help Center</h3><p>WhatsApp: 03185493413</p><a class="btn" href="https://wa.me/923185493413" target="_blank">Contact on WhatsApp</a><br><button class="btn secondary" id="logoutBtn">Logout</button></div></section>
+<section id="admin" class="page"><div class="card"><h2>Admin Panel</h2><div class="note">Preview only: this panel is not protected by real administrator authentication and cannot approve real payments or withdrawals. Do not use it to handle real money.</div><label>Admin Password</label><input type="password" placeholder="Admin password"><button class="btn" id="adminDemo">Open Preview</button><div id="adminArea" class="hidden"><h3>Payment Requests</h3><p class="muted">No live requests connected.</p><h3>Withdrawal Requests</h3><p class="muted">No live requests connected.</p><h3>Users Management</h3><p class="muted">No live users connected.</p><h3>YouTube Links Management</h3><p class="muted">Connect a secure backend to save and publish links.</p><h3>Website Image Management</h3><p class="muted">Image upload and positioning need secure storage and saved layout settings.</p></div></div></section>
+</main><footer>Syabi's.com</footer>
+<script>
+const pages=[...document.querySelectorAll('.page')];
+const nav=document.getElementById('nav');
+function showPage(id){
+  pages.forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+}
+function setSignedIn(name,email){
+  localStorage.setItem('syabi_preview_session',JSON.stringify({name,email}));
+  document.getElementById('profileName').value=name||'';
+  document.getElementById('profileEmail').textContent=email||'';
+  document.getElementById('nav').classList.remove('hidden');
+  document.getElementById('start').classList.remove('active');
+  showPage('home');
+}
+function signOut(){
+  localStorage.removeItem('syabi_preview_session');
+  nav.classList.add('hidden');
+  pages.forEach(p=>p.classList.remove('active'));
+  document.getElementById('start').classList.add('active');
+}
+document.querySelectorAll('#nav button[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.getElementById('navLogout').onclick=signOut;
+document.getElementById('showLogin').onclick=()=>{
+  loginForm.classList.add('active');registerForm.classList.remove('active');
+  showLogin.classList.add('active');showRegister.classList.remove('active');
+};
+document.getElementById('showRegister').onclick=()=>{
+  registerForm.classList.add('active');loginForm.classList.remove('active');
+  showRegister.classList.add('active');showLogin.classList.remove('active');
+};
+document.getElementById('registerBtn').onclick=()=>{
+  const n=regName.value.trim(),e=regEmail.value.trim(),pw=regPass.value,ref=regRef.value.trim();
+  if(!n||!e||!pw)return alert('Please fill in Name, Gmail and Password.');
+  const users=JSON.parse(localStorage.getItem('syabi_preview_users')||'[]');
+  if(users.some(u=>u.email.toLowerCase()===e.toLowerCase()))return alert('This Gmail is already registered in this preview.');
+  if(users.length>0&&!ref)return alert('Referral code is required for later registrations.');
+  if(users.length>0&&!users.some(u=>u.code.toLowerCase()===ref.toLowerCase()))return alert('Please enter a valid preview referral code.');
+  const code='SY'+Math.random().toString(36).slice(2,8).toUpperCase();
+  users.push({name:n,email:e,code:code});
+  localStorage.setItem('syabi_preview_users',JSON.stringify(users));
+  alert('Preview registration created. This is not a real account and does not submit payment. Your preview referral code: '+code);
+  setSignedIn(n,e);
+  showPage('payment');
+};
+document.getElementById('loginBtn').onclick=()=>{
+  const e=loginEmail.value.trim(),pw=loginPass.value;
+  if(!e||!pw)return alert('Enter Gmail and Password.');
+  const users=JSON.parse(localStorage.getItem('syabi_preview_users')||'[]');
+  const u=users.find(x=>x.email.toLowerCase()===e.toLowerCase());
+  if(!u)return alert('No preview account found on this device. Register first.');
+  alert('Preview login only. Real account approval and password verification require Firebase Authentication.');
+  setSignedIn(u.name,u.email);
+};
+document.getElementById('startAdmin').onclick=()=>alert('Admin sign-in is not connected. A secure admin backend is required; this preview does not grant admin access.');
+document.getElementById('copyNumber').onclick=()=>navigator.clipboard?.writeText('03329305255').then(()=>alert('Number copied.')).catch(()=>alert('Account number: 03329305255'));
+document.getElementById('copyCode').onclick=()=>navigator.clipboard?.writeText('SYABI-DEMO').then(()=>alert('Referral code copied.'));
+document.getElementById('paymentSubmit').onclick=()=>{if(!receipt.files.length)return alert('Please select your receipt screenshot.');paymentStatus.textContent='Preview only — request was not sent to an admin.';};
+let withdrawals=[];
+document.getElementById('withdrawBtn').onclick=()=>{
+  const amount=Number(withdrawAmount.value);
+  if(amount<100||amount>300||!withdrawNumber.value.trim()||!withdrawName.value.trim())return alert('Enter account details and an amount from Rs. 100 to Rs. 300.');
+  withdrawals.unshift({amount,method:method.value,date:new Date().toLocaleString(),status:'Preview only'});
+  document.getElementById('history').innerHTML=withdrawals.map(w=>`<p>Rs. ${w.amount} • ${w.method} • ${w.date} • <span class="status">${w.status}</span></p>`).join('');
+  alert('Preview request added on this device only. It has not reached an admin.');
+};
+document.getElementById('saveName').onclick=()=>alert('Preview only: name is not saved to a permanent database.');
+document.getElementById('logoutBtn').onclick=signOut;
+document.getElementById('adminDemo').onclick=()=>adminArea.classList.toggle('hidden');
+['createVideo','earnVideo','teamVideo','withdrawVideo'].forEach(id=>document.getElementById(id).onclick=e=>{e.preventDefault();alert('Admin-managed YouTube links are not connected yet.');});
+const saved=localStorage.getItem('syabi_preview_session');
+if(saved){try{const s=JSON.parse(saved);setSignedIn(s.name,s.email);}catch(e){signOut();}}
+</script>
+</body></html>
