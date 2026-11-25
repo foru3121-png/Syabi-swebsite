@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Syabi's.com</title>
+<style>
+ :root{--g:#6842b8;--p:#f1eaff;--ink:#24213a;--accent:#e85d9e;--bg:#f7f3ff;--line:#e5dcf4}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,sans-serif}header{background:linear-gradient(120deg,#56339d,#a34caa,#e85d9e);color:white;padding:20px;text-align:center}header h1{margin:0}nav{display:none;background:white;padding:9px;gap:7px;overflow:auto;position:sticky;top:0;z-index:3;box-shadow:0 3px 12px #39205b12}nav button,.btn{border:0;border-radius:10px;padding:11px 14px;background:linear-gradient(120deg,#6842b8,#a34caa);color:white;font-weight:600;cursor:pointer;white-space:nowrap}nav button{background:#f1eaff;color:#493276}nav button.active{background:#6842b8;color:white}main{max-width:850px;margin:18px auto;padding:0 12px}.page{display:none;position:relative;min-height:180px;overflow:hidden}.page.active{display:block}.admin-image-layer{position:absolute;z-index:2;touch-action:none;user-select:none;cursor:move;max-width:90%}.admin-image-layer img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;border-radius:6px}.img-resize{position:absolute;right:-8px;bottom:-8px;width:22px;height:22px;border-radius:50%;background:#e85d9e;border:2px solid #fff;touch-action:none}.image-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.image-toolbar select{flex:1;min-width:150px}.card{background:white;padding:18px;border-radius:16px;margin:12px 0;box-shadow:0 5px 20px #39205b12;border:1px solid #eee7f8}h2{margin-top:0;color:#56339d}label{display:block;font-weight:bold;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #d9cdea;border-radius:9px;font-size:15px;background:#fff}.btn{display:inline-block;margin-top:12px}.secondary{background:#f1eaff;color:#493276}.tabs{display:flex;gap:8px}.tabs button{flex:1;padding:11px;border:0;border-radius:9px;background:#f1eaff;color:#493276}.tabs button.active{background:#6842b8;color:white}.form{display:none}.form.active{display:block}.notice{background:#fff0f6;padding:12px;border-left:4px solid #e85d9e;border-radius:9px;line-height:1.5}.muted{color:#716b82;font-size:13px}.hidden{display:none!important}.status{font-weight:bold;color:#8c4b85}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}footer{text-align:center;padding:25px;color:#716b82}button:disabled{opacity:.78;cursor:wait}button:disabled::after{content:"";display:inline-block;width:12px;height:12px;margin-left:9px;vertical-align:-2px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#adminDiagnostic{display:none!important}
+.btn.is-loading::after,.admin-bottom-nav button.is-loading::after{content:"";display:inline-block;width:13px;height:13px;margin-left:8px;vertical-align:-2px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}.admin-bottom-nav button.is-loading::after{display:block;margin:3px auto 0}.approved-requests{margin:14px 0;padding:13px;border:1px solid #e5dcf4;border-radius:17px;background:linear-gradient(140deg,#fff,#faf6ff)}.approved-requests summary{cursor:pointer;font-weight:800;color:#56339d;padding:6px}.approved-name-btn{display:block;width:100%;text-align:left;margin:8px 0;padding:13px;border:1px solid #e8ddf7;border-radius:13px;background:#fff;color:#56339d;font-weight:700;cursor:pointer}.approved-detail{padding:12px;margin:7px 0;border-radius:13px;background:#f8f4ff;font-size:13px;line-height:1.7;overflow-wrap:anywhere}.version-box{margin-top:20px;padding:15px;border:1px solid #e5dcf4;border-radius:16px;background:linear-gradient(135deg,#f9f4ff,#fff4f8)}.site-footer{display:block!important;padding:22px 10px 105px!important;font-weight:800;letter-spacing:.5px;color:#7658a5!important}.admin-mode .site-footer{padding-bottom:90px!important}
+
+.admin-bottom-nav{position:fixed!important;inset:auto 0 0 0!important;z-index:9999;background:#fff;box-shadow:0 -4px 18px #39205b20;display:flex;flex-direction:row;align-items:center;justify-content:space-around;width:100%;height:auto;min-height:64px;max-height:76px;padding:7px 3px calc(7px + env(safe-area-inset-bottom));gap:2px;box-sizing:border-box;transform:none!important;overflow:visible;visibility:visible;}.admin-bottom-nav.hidden{display:none!important}.admin-bottom-nav button{border:0;background:transparent;color:#56339d;flex:1;min-width:0;padding:7px 2px;border-radius:9px;font-size:18px}.admin-bottom-nav button small{display:block;font-size:10px;margin-top:3px}.admin-bottom-nav button.active{background:#f1eaff;color:#a13c8b}.admin-panel-section{padding-bottom:85px}body.admin-mode #nav{display:none!important}body.admin-mode>main{padding-bottom:100px;min-height:calc(100dvh - 20px)}body.admin-mode{overflow-x:hidden}body.admin-mode #adminBottomNav{display:flex;left:0;right:0;bottom:0}body.admin-mode #adminBottomNav button{align-self:center;height:auto}body.admin-mode>footer{display:none}.admin-panel-section .card{margin:10px 0}.admin-action{margin:5px 5px 5px 0}.field-note{font-size:12px;color:#716b82}
+
+/* Wallet visual refresh */
+.wallet-shell{padding:16px;border-radius:22px;background:linear-gradient(180deg,#fff 0%,#fcf9ff 100%)}
+.balance-hero{margin:18px 0 14px;padding:22px 20px;border-radius:20px;background:linear-gradient(125deg,#4e2c98,#8146bd 60%,#d45ba8);color:#fff;box-shadow:0 10px 25px #6842b82b}
+.balance-label{font-size:12px;letter-spacing:2px;font-weight:700;opacity:.88}.balance-value{font-size:clamp(30px,8vw,42px);font-weight:800;line-height:1.25;margin:8px 0}.balance-caption{font-size:12px;opacity:.85}
+.earnings-panel{padding:17px 18px 14px;border:1px solid #e8ddf7;border-radius:18px;background:#fff;box-shadow:0 5px 18px #6842b810}
+.earnings-heading{font-size:15px;font-weight:700;color:#56339d}.today-amount{font-size:28px;font-weight:800;color:#2e8a69;margin:8px 0 12px}.earnings-divider{height:4px;width:100%;border-radius:9px;background:linear-gradient(90deg,#6842b8,#b35bbd,#e85d9e)}.earnings-foot{font-size:10px;letter-spacing:1.5px;color:#81758f;margin-top:9px;font-weight:700}
+.period-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:12px 0}.period-box{padding:15px 13px;border-radius:17px;border:1px solid #e8ddf7;background:linear-gradient(145deg,#fff,#f8f2ff);box-shadow:0 5px 16px #6842b810;min-width:0}.month-box{background:linear-gradient(145deg,#fff,#fff2f8);border-color:#f4dce9}.period-icon{font-size:20px}.period-title{font-size:13px;font-weight:700;color:#56339d;margin-top:7px}.period-amount{font-size:clamp(17px,4.8vw,23px);font-weight:800;color:#2f8b6b;margin:7px 0;overflow-wrap:anywhere}.period-caption{font-size:11px;color:#83798f}
+.wallet-section-title{margin-top:23px;border-bottom:1px solid #eee5f8;padding-bottom:7px}.wallet-section-title h3{margin:0;color:#56339d}.withdraw-submit{width:100%;padding:14px;border-radius:13px}.history-open-btn{width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin:20px 0 8px;padding:14px;border:1px solid #e6d8f4;border-radius:16px;background:linear-gradient(120deg,#f7f0ff,#fff2f8);color:#56339d;cursor:pointer;box-shadow:0 5px 15px #6842b810}.history-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:#6842b8;color:#fff;font-size:25px}.history-open-btn span:nth-child(2){flex:1}.history-open-btn b{display:block;font-size:15px}.history-open-btn small{display:block;font-size:11px;color:#81758f;margin-top:4px}.history-arrow{font-size:28px;font-weight:700}.history-view{margin-top:14px;padding:14px;border:1px solid #e8ddf7;border-radius:18px;background:#fff}.history-view-head h3{margin:14px 0 5px;color:#56339d}.history-view-head .btn{margin-top:0}.history-list{display:grid;gap:10px;margin-top:12px}.withdrawal-item{padding:14px;border:1px solid #e8ddf7;border-radius:15px;background:linear-gradient(145deg,#fff,#fbf8ff);box-shadow:0 4px 12px #6842b80c}.withdrawal-item-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.withdrawal-amount{font-size:21px;font-weight:800;color:#56339d}.withdrawal-status{font-size:11px;font-weight:700;padding:6px 10px;border-radius:20px;background:#f0eaff;color:#6842b8;text-transform:capitalize}.withdrawal-status.approved{background:#e6f8ef;color:#218456}.withdrawal-status.rejected{background:#fff0f1;color:#c13e57}.withdrawal-status.pending{background:#fff5df;color:#a36a13}.withdrawal-meta{font-size:12px;line-height:1.65;color:#70677f;margin-top:9px}.withdrawal-meta b{color:#4c4263}.history-empty{padding:22px 14px;text-align:center;border:1px dashed #d9c9ee;border-radius:15px;color:#7a708d;background:#fcfaff}
+@media(max-width:420px){.wallet-shell{padding:13px}.balance-hero{padding:20px 16px}.period-box{padding:13px 10px}.period-grid{gap:8px}}
+/* YouTube-style learning links */
+.youtube-link-btn{display:flex!important;align-items:center;justify-content:center;gap:10px;width:100%;margin:12px 0;padding:14px 16px;border-radius:14px!important;background:linear-gradient(135deg,#ff2b2b,#d90000)!important;color:#fff!important;font-weight:800;text-decoration:none!important;box-shadow:0 6px 16px rgba(220,0,0,.22);border:1px solid #ff6969;position:relative;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+.youtube-link-btn:before{content:'▶';display:inline-grid;place-items:center;width:27px;height:20px;border-radius:6px;background:#fff;color:#e00000;font-size:14px;line-height:1;flex:0 0 auto}
+.youtube-link-btn:after{content:'↗';font-size:17px;opacity:.9;margin-left:2px}
+.youtube-link-btn:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 9px 22px rgba(220,0,0,.3)}
+.user-video-links{display:grid;gap:4px;margin-top:12px}
+.user-video-links:empty{display:none}
+.user-video-heading{font-size:14px;font-weight:800;color:#c90000;margin:12px 0 6px}
+
+
+
+/* Smooth visual polish across all pages */
+:root{--soft-shadow:0 10px 28px rgba(69,39,117,.09)}
+.page.active{animation:pageReveal .42s cubic-bezier(.2,.75,.25,1) both}
+.card{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;animation:cardEnter .45s ease both}
+.card:hover{box-shadow:var(--soft-shadow);border-color:#dfd0f4}
+h1,h2,h3{letter-spacing:-.25px}h2{font-size:clamp(20px,4.5vw,27px);font-weight:800}h3{font-weight:750;color:#62439a}
+.btn,nav button,.tabs button,.history-open-btn{transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+.btn:hover,nav button:hover,.tabs button:hover,.history-open-btn:hover{filter:brightness(1.04);transform:translateY(-2px);box-shadow:0 7px 16px #6842b822}
+.btn:active,nav button:active,.tabs button:active,.history-open-btn:active{transform:scale(.98)}
+input:focus,select:focus{outline:none;border-color:#a783dc;box-shadow:0 0 0 3px #6842b81c}
+.notice{animation:softPulse 3.8s ease-in-out infinite}
+@keyframes pageReveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardEnter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softPulse{0%,100%{box-shadow:0 0 0 rgba(232,93,158,0)}50%{box-shadow:0 4px 18px rgba(232,93,158,.09)}}
+/* Touch-friendly selected-page image editor */
+.image-editor-stage{position:relative;width:100%;min-height:360px;margin:14px 0 10px;padding:12px;overflow:hidden;border:2px dashed #cbb6e9;border-radius:20px;background:linear-gradient(135deg,#f9f5ff,#fff7fb);box-shadow:inset 0 0 0 5px #fff8;touch-action:none;user-select:none}
+.image-editor-stage:empty:before{content:'Page preview will appear here';display:grid;place-items:center;min-height:330px;color:#87789d;font-weight:700}
+.image-editor-preview{position:relative;width:100%;min-height:330px;background:#fff;border:1px solid #e9e0f5;border-radius:14px;overflow:hidden;box-shadow:0 7px 20px #39205b12;pointer-events:auto}
+.image-editor-preview .page{display:block!important;min-height:330px!important;height:auto!important;padding:4px;background:#fff;overflow:hidden;pointer-events:none}
+.image-editor-preview .page .card{animation:none;box-shadow:0 2px 7px #39205b0b;margin:8px;padding:12px}
+.image-editor-preview .page input,.image-editor-preview .page button,.image-editor-preview .page select{font-size:11px;padding:7px}
+.image-editor-preview .page .admin-image-layer{display:none!important}
+.image-editor-stage .editor-image-layer{position:absolute;z-index:20;touch-action:none;user-select:none;pointer-events:auto;cursor:grab;border:2px solid #e85d9e;border-radius:8px;box-shadow:0 5px 20px #e85d9e35;background:#ffffff22}
+.image-editor-stage .editor-image-layer:active{cursor:grabbing}
+.editor-image-layer img{width:100%;height:100%;display:block;object-fit:contain;pointer-events:none;border-radius:6px}
+.editor-resize-handle{position:absolute;right:-12px;bottom:-12px;width:32px;height:32px;border-radius:50%;border:3px solid #fff;background:linear-gradient(135deg,#e85d9e,#6842b8);box-shadow:0 3px 12px #39205b45;touch-action:none;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:900}
+.editor-stage-label{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:0 0 9px;color:#6842b8;font-size:12px;font-weight:800}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+/* User bottom navigation and profile cards */
+.user-bottom-nav{position:fixed!important;left:0;right:0;bottom:0;top:auto!important;z-index:9998;background:#fff;box-shadow:0 -5px 22px #39205b1c;display:none;align-items:center;justify-content:space-around;width:100%;min-height:66px;padding:7px 3px calc(7px + env(safe-area-inset-bottom));gap:2px;overflow:visible}
+.user-bottom-nav button{flex:1;min-width:0;border:0;background:transparent;color:#56339d;padding:7px 2px;border-radius:11px;font-size:18px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.user-bottom-nav button small{font-size:10px;font-weight:700}.user-bottom-nav button.active{background:#f1eaff;color:#a13c8b}
+body:not(.admin-mode)>main{padding-bottom:100px}body:not(.admin-mode)>footer{padding-bottom:95px}
+.profile-card{padding:16px}.profile-info-box{border:1px solid #e7dcf5;background:linear-gradient(145deg,#fff,#faf6ff);border-radius:17px;padding:14px;margin:13px 0;box-shadow:0 5px 16px #6842b810;animation:cardEnter .4s ease both}.profile-box-label{font-size:11px;letter-spacing:1.2px;font-weight:800;color:#7d6b9c;margin-bottom:9px}.profile-name-row,.profile-email-row{display:flex;align-items:center;gap:9px}.profile-name-row input{flex:1;min-width:0;font-size:17px;font-weight:700;color:#4d347f;background:#f9f6ff}.profile-name-row input[readonly]{border-color:transparent;background:#f4effb}.profile-edit-btn{margin:0;padding:10px 12px}.profile-save-btn,.profile-cancel-btn{margin:10px 7px 0 0}.profile-email-row{justify-content:space-between;flex-wrap:wrap;font-weight:700;overflow-wrap:anywhere}.permanent-badge{font-size:10px;padding:6px 10px;border-radius:20px;background:#eee6ff;color:#6941a8;font-weight:800;letter-spacing:.3px}.email-profile-box .muted{margin-bottom:0}.profile-accordion{border:1px solid #e7dcf5;background:white;border-radius:16px;margin:13px 0;overflow:hidden;box-shadow:0 5px 16px #6842b810}.profile-accordion-btn{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;border:0;background:linear-gradient(110deg,#f7f0ff,#fff3f8);padding:16px;color:#56339d;font-weight:800;font-size:15px;cursor:pointer}.accordion-chevron{font-size:22px;color:#a34caa}.profile-accordion-content{padding:15px;line-height:1.7;color:#625773;animation:pageReveal .25s ease}.profile-accordion-content p{margin-top:0}.profile-logout-btn{width:100%;margin-top:18px;background:linear-gradient(120deg,#b4234d,#e85d9e);padding:14px;border-radius:14px}
+@media(max-width:430px){.user-bottom-nav button{font-size:17px}.user-bottom-nav button small{font-size:9px}.profile-card{padding:13px}}
+
+
+/* User announcement + timed feedback + animated confirmation modal */
+.announcement-banner{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:15px 16px;border-radius:18px;background:linear-gradient(125deg,#fff7dc,#fff0f7);border:1px solid #f4dca7;box-shadow:0 8px 24px #9b74151c;animation:announceIn .55s cubic-bezier(.2,.8,.2,1) both;position:relative;z-index:4}.announcement-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:14px;background:#fff;color:#a36a13;font-size:23px;box-shadow:0 4px 12px #a36a1320}.announcement-banner b{color:#8b5a0b;font-size:15px}.announcement-banner p{margin:5px 0 0;line-height:1.5;color:#6f5528;overflow-wrap:anywhere;white-space:pre-wrap}
+.transient-message{display:block;min-height:0;margin:10px 0 0;padding:0;border-radius:12px;opacity:0;transform:translateY(-7px);transition:opacity .25s ease,transform .25s ease,padding .25s ease;background:#f2eaff;color:#56339d}.transient-message.show{opacity:1;transform:translateY(0);padding:11px 13px}.transient-message.error{background:#fff0f2;color:#b4234d}.transient-message.success{background:#eafaf1;color:#217a50}
+#appModalOverlay{position:fixed;inset:0;z-index:20000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(31,19,49,.48);backdrop-filter:blur(5px)}#appModalOverlay.open{display:flex;animation:overlayIn .22s ease both}.app-modal{width:min(100%,390px);padding:24px 20px 18px;border-radius:25px;background:linear-gradient(145deg,#fff,#fcf7ff);border:1px solid #fff;box-shadow:0 25px 80px #25103f40;text-align:center;transform:translateY(18px) scale(.94);animation:modalIn .42s cubic-bezier(.16,1,.3,1) both}.app-modal-icon{width:62px;height:62px;margin:0 auto 12px;border-radius:21px;display:grid;place-items:center;background:linear-gradient(135deg,#6842b8,#e85d9e);color:#fff;font-size:29px;box-shadow:0 9px 22px #6842b830}.app-modal h3{margin:4px 0 8px;color:#56339d;font-size:21px}.app-modal p{margin:0 0 17px;color:#6f6682;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}.app-modal input{margin:0 0 15px}.app-modal-actions{display:flex;gap:10px;justify-content:center}.app-modal-actions button{flex:1;min-width:0}.app-modal .modal-cancel{background:#f1eaff;color:#56339d}.app-modal .modal-ok{background:linear-gradient(120deg,#6842b8,#a34caa,#e85d9e)}@keyframes announceIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}@keyframes overlayIn{from{opacity:0}to{opacity:1}}@keyframes modalIn{0%{opacity:0;transform:translateY(25px) scale(.9)}70%{opacity:1;transform:translateY(-3px) scale(1.015)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+
+.video-place-card{margin-top:18px;border:1px solid #e8ddf7;background:linear-gradient(145deg,#fff,#fcf7ff)}
+.video-placement-stage{min-height:400px;touch-action:pan-y;}
+.video-placement-preview{position:relative;height:440px;overflow:hidden;background:#fff;border:1px solid #e9e0f5;border-radius:14px;}
+.video-placement-preview .page{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;padding:4px!important;pointer-events:none!important;background:#fff!important;}
+.video-placement-preview .page .card{margin:6px;padding:10px;box-shadow:none;font-size:11px}
+.video-placement-preview .page .admin-image-layer,.video-placement-preview .page .video-placement-overlay{display:none!important}
+.video-placement-preview .page input,.video-placement-preview .page button,.video-placement-preview .page select{font-size:10px;padding:5px}
+.video-placement-drag{position:absolute;z-index:40;touch-action:none;user-select:none;cursor:grab;min-width:90px;max-width:95%;width:48%;padding:11px 8px;border:2px solid #ff7777;border-radius:12px;background:linear-gradient(135deg,#ff3030,#c90000);color:#fff;text-align:center;font-weight:800;box-shadow:0 7px 18px #d00a3040;line-height:1.25;overflow-wrap:anywhere;}
+.video-placement-drag:active{cursor:grabbing}.video-placement-overlay{position:absolute;z-index:12;left:0;top:0;width:100%;height:100%;pointer-events:none}.video-placement-overlay .youtube-link-btn{position:absolute!important;margin:0!important;pointer-events:auto!important;z-index:12}
+.video-placement-hint{font-size:11px;color:#7c6a91;text-align:center;padding:8px}
+
+
+/* Password show/hide eye control */
+.password-field{position:relative;width:100%;display:block;margin:0}
+.password-field>input{width:100%;padding-right:54px!important}
+.password-eye-btn{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:40px;height:38px;border:0;border-radius:10px;background:#f1eaff;color:#6842b8;display:grid;place-items:center;cursor:pointer;padding:0;z-index:2;touch-action:manipulation}
+.password-eye-btn:active{transform:translateY(-50%) scale(.94)}
+.password-eye-btn svg{width:22px;height:22px;display:block;pointer-events:none}
+.password-eye-btn:focus-visible{outline:2px solid #a34caa;outline-offset:2px}
+</style>
+<style>
+/* Compact expandable user/team cards */
+.member-card{border:1px solid #e8ddf7;border-radius:16px;background:linear-gradient(145deg,#fff,#fbf7ff);box-shadow:0 5px 16px #6842b810;margin:10px 0;overflow:hidden;animation:cardEnter .35s ease both}
+.member-card-toggle{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:14px;border:0;background:transparent;color:#4d347d;cursor:pointer;font-weight:800;font-size:15px}
+.member-avatar{width:39px;height:39px;flex:0 0 39px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#6842b8,#e85d9e);color:#fff;font-size:17px}
+.member-card-name{flex:1;min-width:0;overflow-wrap:anywhere}
+.member-chevron{font-size:22px;color:#a14caa;transition:transform .2s ease}
+.member-card-toggle[aria-expanded="true"] .member-chevron{transform:rotate(45deg)}
+.member-card-details{padding:0 14px 14px;border-top:1px solid #f0e8fa;animation:pageReveal .2s ease both}
+.member-detail-line{padding:12px;border-radius:12px;background:#f5efff;color:#56339d;font-weight:800;margin-top:12px}
+.admin-user-details p{margin:9px 0;line-height:1.5}
+</style>
+</head>
+<body>
+<header><h1>Welcome to Syabi's.com</h1><p>Referral Rewards • Team Management • Wallet</p></header>
+<nav id="nav" class="user-bottom-nav" aria-label="Main navigation">
+<button data-page="home">🏠<small>Home</small></button><button data-page="pending">💳<small>Payment</small></button><button data-page="team">👥<small>Team</small></button><button data-page="wallet">💰<small>Wallet</small></button><button data-page="profile">👤<small>Profile</small></button><button data-page="admin" id="adminNav" class="hidden">⚙️<small>Admin</small></button>
+</nav>
+<main>
+<div id="userAnnouncement" class="announcement-banner hidden" role="status"><div class="announcement-icon">📢</div><div><b>Announcement</b><p id="userAnnouncementText"></p></div></div>
+<section id="access" class="page active">
+<div class="card"><h2>Welcome</h2><p>Syabi's.com is a referral rewards platform concept. Register or log in to continue.</p><a class="btn youtube-link-btn" href="#" id="howCreate">How to Create an Account</a><div class="user-video-heading">▶ Helpful YouTube Videos</div><div id="userVideoLinksAccess" class="user-video-links"></div></div>
+<div class="card"><div class="tabs"><button id="loginTab" class="active">Login</button><button id="registerTab">Register</button></div>
+<div id="loginForm" class="form active"><label>Gmail</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Enter your Gmail"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password"><button class="btn" id="loginBtn" type="button">Login</button><button class="btn secondary" id="forgotPasswordBtn" type="button">Forgot Password?</button><p id="forgotPasswordMessage" class="muted transient-message" aria-live="polite"></p></div>
+<div id="registerForm" class="form"><label>Name</label><input id="regName"><label>Gmail</label><input id="regEmail" type="email"><label>Password</label><input id="regPassword" type="password"><label>Referral Code</label><input id="regReferral"><button class="btn" id="registerBtn">Register</button></div>
+<p id="accessMessage" class="muted transient-message" aria-live="polite"></p></div>
+<div class="card"><h3>Admin Login</h3><p class="muted">Admin must use a Firebase Authentication account that has been authorized in Firestore.</p><label>Admin Gmail</label><input id="adminEmail" type="email" autocomplete="username"><label>Admin Password</label><input id="adminPassword" type="password" autocomplete="current-password"><button class="btn" id="adminLoginBtn">Admin Login</button><p id="adminLoginMessage" class="muted transient-message" aria-live="polite"></p></div>
+</section>
+<section id="pending" class="page"><div class="card" id="paymentCard">
+<div id="paymentFormArea"><h2>Payment Verification</h2><p>Your account will be activated after the administrator verifies your payment.</p><div class="notice"><b>Send Rs.150 to this UPaisa account</b><br>Account Number: <b id="payNo">03329305255</b><br>Account Holder: <b>HABIBULLAH</b></div><button class="btn secondary" id="copyNo">Copy UPaisa Number</button>
+<h3 style="margin-top:20px">Enter Payment Details</h3><label>Receipt / Transaction Number</label><input id="receiptNumber" placeholder="Enter transaction ID" maxlength="80"><label>Amount Sent (Rs.)</label><input id="paymentAmount" type="number" min="1" step="1" value="150"><label>Which account did you use to send payment?</label><select id="paymentMethod"><option value="UPaisa">UPaisa</option><option value="EasyPaisa">EasyPaisa</option><option value="JazzCash">JazzCash</option></select><button class="btn" id="submitPayment">Submit Request</button><p id="payMessage" class="status"></p><button class="btn secondary" id="pendingLogout">Logout</button></div>
+<div id="paymentPendingState" class="hidden" style="min-height:55vh;display:none;align-items:center;justify-content:center;text-align:center"><div><div style="font-size:48px;margin-bottom:12px">⏳</div><h2 style="color:#6842b8">PENDING</h2><p><b>Your payment request is pending.</b></p><p>Please wait patiently while the admin verifies your request.</p><p class="muted">You will get access to the website after approval.</p><button class="btn secondary" id="pendingOnlyLogout">Logout</button></div></div>
+</div></section>
+<section id="home" class="page"><div class="card"><h2>Welcome to Syabi's.com</h2><p>Manage your referral team, view your account status and learn about wallet and withdrawal features. Account rewards and payments are subject to verification.</p><a class="btn youtube-link-btn" href="#" id="howEarn">How to Earn Money</a><div class="user-video-heading">▶ Helpful YouTube Videos</div><div id="userVideoLinksHome" class="user-video-links"></div><p id="homeWelcome"></p></div></section>
+<section id="team" class="page"><div class="card"><h2>My Team</h2><p>Your referral code: <b id="myCode">Loading…</b></p><button class="btn secondary" id="copyReferral">Copy Referral Code</button><h3>Team Members</h3><div id="teamMembers" class="muted">Loading…</div><a class="btn youtube-link-btn" href="#" id="howTeam">How to Make a Team</a></div></section>
+<section id="wallet" class="page"><div class="card wallet-shell"><h2>My Wallet</h2><div class="notice">Referral rewards are credited automatically after the referred member's payment is verified and their account is approved.</div>
+<div class="balance-hero"><div class="balance-label">TOTAL BALANCE</div><div class="balance-value" id="walletBalance">Rs. 0</div><div class="balance-caption">Available wallet balance</div></div>
+<div class="earnings-panel"><div class="earnings-heading">Today's Earnings</div><div class="today-amount" id="earnToday">Rs. 0</div><div class="earnings-divider"></div><div class="earnings-foot">TOTAL EARNED TODAY</div></div>
+<div class="period-grid"><div class="period-box week-box"><div class="period-icon">📅</div><div class="period-title">Last 7 Days</div><div class="period-amount" id="earnWeek">Rs. 0</div><div class="period-caption">Weekly earnings</div></div><div class="period-box month-box"><div class="period-icon">🌙</div><div class="period-title">Last 30 Days</div><div class="period-amount" id="earnMonth">Rs. 0</div><div class="period-caption">Monthly earnings</div></div></div>
+<p id="walletStatsMessage" class="muted" aria-live="polite"></p>
+<div class="wallet-section-title"><h3>Withdrawal Request</h3></div><label>Payment Method</label><select id="withdrawMethod"><option>EasyPaisa</option><option>JazzCash</option><option>UPaisa</option></select><label>Account Number</label><input id="withdrawAccount"><label>Account Holder Name</label><input id="withdrawHolder"><label>Amount (Rs. 100–300)</label><input id="withdrawAmount" type="number" min="100" max="300"><button class="btn withdraw-submit" id="withdrawBtn">Submit Withdrawal Request</button><p id="withdrawMessage" class="status"></p>
+<button class="history-open-btn" id="openWithdrawHistory" type="button"><span class="history-icon">↻</span><span><b>Withdrawal History</b><small>View your past requests and status</small></span><span class="history-arrow">›</span></button>
+<div id="withdrawHistoryView" class="history-view hidden"><div class="history-view-head"><button class="btn secondary" id="backWallet" type="button">← Back to Wallet</button><h3>Withdrawal History</h3><p class="muted">Your withdrawal requests and their current status.</p></div><div id="withdrawHistory" class="history-list">Loading history…</div></div>
+<a class="btn youtube-link-btn" href="#" id="howWithdraw">How to Withdraw Money</a></div></section>
+<section id="profile" class="page"><div class="card profile-card"><h2>My Profile</h2>
+<div class="profile-info-box"><div class="profile-box-label">👤 YOUR NAME</div><div class="profile-name-row"><input id="profileName" readonly aria-label="Profile name"><button class="btn secondary profile-edit-btn" id="editProfileName" type="button">✏️ Edit</button></div><button class="btn profile-save-btn hidden" id="saveProfile" type="button">Save Name</button><button class="btn secondary profile-cancel-btn hidden" id="cancelProfileName" type="button">Cancel</button></div>
+<div class="profile-info-box email-profile-box"><div class="profile-box-label">✉️ GMAIL</div><div class="profile-email-row"><span id="profileEmail"></span><span class="permanent-badge">Permanently</span></div><p class="muted">Your registered Gmail is permanent and cannot be edited here.</p></div>
+<div class="profile-accordion"><button class="profile-accordion-btn" id="aboutToggle" type="button" aria-expanded="false"><span>ℹ️ About Website</span><span class="accordion-chevron">＋</span></button><div id="aboutContent" class="profile-accordion-content hidden"><p>Syabi's.com is designed to help members understand referral-based rewards, invite people through unique referral codes, build teams and view account information. Members can submit payment verification requests and, when eligible, request withdrawals through supported payment methods. The platform aims to provide a simple experience with clear request statuses and helpful guidance. All payments, rewards and withdrawals must be verified according to the platform's rules. Members should never share passwords or send money to unofficial accounts. Contact the Help Center if you need assistance with your account.</p></div></div>
+<div class="profile-accordion"><button class="profile-accordion-btn" id="helpToggle" type="button" aria-expanded="false"><span>💬 Help Center</span><span class="accordion-chevron">＋</span></button><div id="helpContent" class="profile-accordion-content hidden"><p class="muted">Need help? Contact us on WhatsApp.</p><a class="btn" target="_blank" rel="noopener" href="https://wa.me/923185493413">WhatsApp 03185493413</a></div></div>
+<button class="btn profile-logout-btn" id="profileLogout" type="button">↪ Log Out</button>
+</div></section>
+<section id="admin" class="page"><div class="card"><h2>Admin Dashboard</h2><p id="adminMessage" class="notice">Administrator area</p><div id="adminContent" class="hidden">
+<div id="adm-payments" class="admin-panel-section"><h3>Payment Requests</h3><div id="paymentRequests"></div><details class="approved-requests"><summary>Approved Payments</summary><div id="approvedPayments"></div></details></div>
+<div id="adm-withdrawals" class="admin-panel-section hidden"><h3>Withdrawal Requests</h3><div id="adminWithdrawals"></div><details class="approved-requests"><summary>Approved Withdrawals</summary><div id="approvedWithdrawals"></div></details></div>
+<div id="adm-users" class="admin-panel-section hidden"><h3>User Management</h3><div id="adminUsers"></div></div>
+<div id="adm-ads" class="admin-panel-section hidden"><h3>Add-Ad / YouTube Links</h3><label>Video title (Admin record)</label><input id="videoTitle" placeholder="e.g. Account tutorial"><label>Button text (shown to users)</label><input id="videoButtonText" placeholder="e.g. اکاؤنٹ بنانے کا طریقہ"><label>YouTube URL</label><input id="videoUrl" type="url" placeholder="https://youtube.com/watch?v=..."><button class="btn" id="saveVideo">Add Video Link</button><p id="videoMessage" class="muted"></p><div id="videoLinks"></div><div class="card video-place-card"><h3>📍 Place YouTube Button on User Page</h3><p class="muted">Select a saved link and page. In the preview, drag the red button with your finger to the exact place, then save.</p><label for="videoPlaceSelect">Choose link</label><select id="videoPlaceSelect"><option value="">Select a YouTube link</option></select><label for="videoPlacePage">User page</label><select id="videoPlacePage"><option value="access">Login / Register</option><option value="pending">Payment Request</option><option value="home">Home</option><option value="team">My Team</option><option value="wallet">Wallet</option><option value="profile">Profile</option></select><div class="image-toolbar"><button class="btn" id="saveVideoPlacement" type="button">Save Button Position</button><button class="btn secondary" id="clearVideoPlacement" type="button">Remove Position</button></div><div id="videoPlacementStage" class="image-editor-stage video-placement-stage"></div><p id="videoPlacementStatus" class="muted" role="status">Choose a link and page, then drag the red button in the preview.</p></div></div>
+<div id="adm-images" class="admin-panel-section hidden"><h3>Website Image Management</h3><p class="muted">Choose a page and image from your phone. Drag and resize the image, then save.</p><div class="image-toolbar"><select id="imageTarget"><option value="access">Login / Register</option><option value="pending">Payment Request</option><option value="home">Home</option><option value="team">My Team</option><option value="wallet">Wallet</option><option value="profile">Profile</option></select><input id="pageImageFile" type="file" accept="image/*"></div><div class="image-toolbar"><button class="btn" id="saveImageLayout" type="button">Save Layout</button><button class="btn secondary" id="removePageImage" type="button">Remove Image</button></div><div id="imageEditorStage" class="image-editor-stage" aria-label="Selected page image editor"></div><p id="imageEditorStatus" class="muted" role="status">Select a page, choose an image, then drag it and use the corner handle to resize.</p></div>
+<div id="adm-settings" class="admin-panel-section hidden"><h3>Admin Settings</h3><label>Website announcement</label><input id="siteAnnouncement" placeholder="Optional announcement for users"><label>Help Center WhatsApp</label><input id="siteHelpNumber" value="03185493413"><button class="btn" id="saveAdminSettings">Save Settings</button><p id="settingsMessage" class="muted"></p><hr style="border:0;border-top:1px solid #e5dcf4;margin:22px 0"><div class="version-box"><h3>Version</h3><label for="adminVersion">Admin Version</label><input id="adminVersion" maxlength="40" placeholder="e.g. v1.2.0"><button class="btn" id="saveAdminVersion" type="button">Save Version</button><p id="versionMessage" class="muted"></p></div><h3>Admin Account</h3><p class="muted">Sign out of the administrator account on this device.</p><button class="btn" id="adminSettingsLogout" type="button" style="background:linear-gradient(120deg,#b4234d,#e85d9e)">Logout</button><p id="adminLogoutMessage" class="muted" role="status"></p><p class="notice">Withdrawal approval deducts the requested amount from the user's website wallet balance. This is a wallet balance update only; actual bank/mobile-wallet payment must be sent separately by Admin.</p></div>
+</div></div></section>
+</main><nav id="adminBottomNav" class="admin-bottom-nav hidden" aria-label="Admin dashboard navigation"><button data-admin="payments" class="active" type="button">💳<small>Payments</small></button><button data-admin="withdrawals" type="button">↗<small>Withdrawals</small></button><button data-admin="users" type="button">👥<small>Users</small></button><button data-admin="ads" type="button">▶<small>Add-Ad</small></button><button data-admin="images" type="button">🖼<small>Images</small></button><button data-admin="settings" type="button">⚙<small>Settings</small></button></nav><div id="appModalOverlay" aria-hidden="true"><div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="appModalTitle"><div class="app-modal-icon" id="appModalIcon">✨</div><h3 id="appModalTitle">Syabi's.com</h3><p id="appModalText"></p><input id="appModalInput" class="hidden" type="text"><div class="app-modal-actions"><button class="btn modal-cancel" id="appModalCancel" type="button">Cancel</button><button class="btn modal-ok" id="appModalOk" type="button">OK</button></div></div></div>
+<footer class="site-footer">Syabi's.com <span id="footerVersion"></span></footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* Firebase web app configuration supplied earlier for project syabi-scom. */
+const firebaseConfig={
+ apiKey:"AIzaSyAoQPsWcpedaMO00MsWCnahueC46Ec2Kk8",
+ authDomain:"syabi-scom.firebaseapp.com",
+ projectId:"syabi-scom",
+ storageBucket:"syabi-scom.firebasestorage.app",
+ messagingSenderId:"418463227638",
+ appId:"1:418463227638:web:e08d2426f6404005bf16d7",
+ measurementId:"G-6JXBXKPTRW"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(), db=firebase.firestore();
+const $=id=>document.getElementById(id);
+// Add accessible show/hide eye buttons to every password input, including dynamically added fields.
+function setupPasswordEye(input){
+ if(!input || input.tagName!=='INPUT' || input.type!=='password' || input.dataset.eyeReady==='1')return;
+ input.dataset.eyeReady='1';
+ const wrap=document.createElement('div');wrap.className='password-field';
+ input.parentNode.insertBefore(wrap,input);wrap.appendChild(input);
+ const eye=document.createElement('button');eye.type='button';eye.className='password-eye-btn';eye.setAttribute('aria-label','Show password');eye.setAttribute('aria-pressed','false');
+ const eyeOpen='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+ const eyeClosed='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a15 15 0 0 1-3.1 4.1M6.2 6.2C3.5 8 2 12 2 12s3.5 7 10 7a10.5 10.5 0 0 0 4-.8"/></svg>';
+ eye.innerHTML=eyeOpen;wrap.appendChild(eye);
+ eye.addEventListener('click',()=>{const show=input.type==='password';input.type=show?'text':'password';eye.innerHTML=show?eyeClosed:eyeOpen;eye.setAttribute('aria-label',show?'Hide password':'Show password');eye.setAttribute('aria-pressed',show?'true':'false');});
+}
+function setupAllPasswordEyes(root=document){root.querySelectorAll('input[type="password"]').forEach(setupPasswordEye);}
+setupAllPasswordEyes();
+const passwordEyeObserver=new MutationObserver(records=>{for(const record of records){record.addedNodes.forEach(node=>{if(node.nodeType===1){if(node.matches&&node.matches('input[type="password"]'))setupPasswordEye(node);setupAllPasswordEyes(node);}});}});
+passwordEyeObserver.observe(document.body,{childList:true,subtree:true});
+let currentUser=null,currentProfile=null,isAdmin=false,authFlowBusy=false,adminModeRequested=false,adminSessionAuthorized=false;
+const pageIds=['access','pending','home','team','wallet','profile','admin'];
+function showPage(id){if(id==='admin'&&(!isAdmin||!adminSessionAuthorized)){id='access';}pageIds.forEach(x=>{const el=$(x);if(el)el.classList.toggle('active',x===id);});document.querySelectorAll('nav [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));}
+const transientTimers=new WeakMap();
+function setTransientMessage(el,text,kind='info',duration=3600){if(!el)return;const old=transientTimers.get(el);if(old)clearTimeout(old);el.textContent=text;el.classList.add('transient-message','show');el.classList.toggle('error',kind==='error');el.classList.toggle('success',kind==='success');const timer=setTimeout(()=>{el.classList.remove('show');setTimeout(()=>{if(!el.classList.contains('show'))el.textContent='';},280);},duration);transientTimers.set(el,timer);}
+function msg(t,kind){setTransientMessage($('accessMessage'),t,kind||(/success|registered|updated/i.test(t)?'success':(/incorrect|invalid|failed|error|blocked|denied/i.test(t)?'error':'info')));}
+let modalResolver=null,modalMode='alert';function openAppModal({title="Syabi's.com",message='',icon='✨',mode='alert',defaultValue='',placeholder='',ok='OK',cancel='Cancel'}){return new Promise(resolve=>{modalResolver=resolve;modalMode=mode;$('appModalTitle').textContent=title;$('appModalText').textContent=message;$('appModalIcon').textContent=icon;$('appModalOk').textContent=ok;$('appModalCancel').textContent=cancel;$('appModalCancel').classList.toggle('hidden',mode==='alert');const input=$('appModalInput');input.classList.toggle('hidden',mode!=='prompt');input.value=defaultValue;input.placeholder=placeholder;$('appModalOverlay').classList.add('open');$('appModalOverlay').setAttribute('aria-hidden','false');setTimeout(()=>mode==='prompt'?input.focus():$('appModalOk').focus(),120);});}
+function closeAppModal(value){$('appModalOverlay').classList.remove('open');$('appModalOverlay').setAttribute('aria-hidden','true');const r=modalResolver;modalResolver=null;if(r)r(value);}
+function appAlert(message){openAppModal({title:"Syabi's.com",message:String(message),icon:'✨',mode:'alert'});}
+function appConfirm(message){return openAppModal({title:'Are you sure?',message:String(message),icon:'💜',mode:'confirm',ok:'Yes, continue',cancel:'No, cancel'});}
+function appPrompt(message,defaultValue=''){return openAppModal({title:'Please enter',message:String(message),icon:'✍️',mode:'prompt',defaultValue,placeholder:'Enter here',ok:'Save',cancel:'Cancel'});}
+$('appModalOk').onclick=()=>closeAppModal(modalMode==='prompt'?$('appModalInput').value:true);$('appModalCancel').onclick=()=>closeAppModal(modalMode==='prompt'?null:false);$('appModalOverlay').addEventListener('click',e=>{if(e.target===$('appModalOverlay'))closeAppModal(false);});$('appModalInput').addEventListener('keydown',e=>{if(e.key==='Enter')closeAppModal($('appModalInput').value);});window.alert=appAlert;
+$('loginTab').onclick=()=>{ $('loginTab').classList.add('active');$('registerTab').classList.remove('active');$('loginForm').classList.add('active');$('registerForm').classList.remove('active');};
+$('registerTab').onclick=()=>{ $('registerTab').classList.add('active');$('loginTab').classList.remove('active');$('registerForm').classList.add('active');$('loginForm').classList.remove('active');};
+$('adminLoginBtn').onclick=async()=>{const email=$('adminEmail').value.trim(),password=$('adminPassword').value;if(!email||!password){setTransientMessage($('adminLoginMessage'),'Enter Gmail and password.','error');return;}adminModeRequested=true;$('adminLoginBtn').disabled=true;$('adminLoginMessage').textContent='Verifying…';$('adminLoginMessage').classList.remove('transient-message','show');try{await auth.signInWithEmailAndPassword(email,password);}catch(e){adminModeRequested=false;setTransientMessage($('adminLoginMessage'),'Invalid Gmail or Password','error');$('adminLoginBtn').disabled=false;}};
+document.querySelectorAll('nav [data-page]').forEach(b=>b.onclick=async()=>{if(b.dataset.page==='admin'&&(!isAdmin||!adminSessionAuthorized)){await appAlert('Admin access is not authorized for this account.');return;}showPage(b.dataset.page);});
+$('profileLogout').onclick=$('pendingLogout').onclick=$('pendingOnlyLogout').onclick=async()=>{if(await appConfirm('Are you sure you want to log out?'))await auth.signOut();};
+$('loginBtn').onclick=async()=>{const email=$('loginEmail').value.trim(),password=$('loginPassword').value;if(!email||!password){msg('Enter Gmail and password.');return;}$('loginBtn').disabled=true;try{await auth.signInWithEmailAndPassword(email,password);}catch(e){msg(firebaseError(e)+' (code: '+(e.code||'unknown')+')');$('loginBtn').disabled=false;}};
+$('forgotPasswordBtn').onclick=async()=>{const email=$('loginEmail').value.trim(),btn=$('forgotPasswordBtn'),message=$('forgotPasswordMessage');if(!email){setTransientMessage(message,'First enter your registered Gmail in the Gmail field above.','error');$('loginEmail').focus();return;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setTransientMessage(message,'Please enter a valid email address.','error');$('loginEmail').focus();return;}btn.disabled=true;setTransientMessage(message,'Sending password reset email…','info',10000);try{await auth.sendPasswordResetEmail(email);setTransientMessage(message,'If an account exists for this email, a password reset link has been sent. Check Inbox and Spam/Junk.','success',3600);}catch(e){if(e.code==='auth/user-not-found'){setTransientMessage(message,'If an account exists for this email, a password reset link has been sent. Check Inbox and Spam/Junk.','success',3600);}else if(e.code==='auth/invalid-email'){setTransientMessage(message,'Please enter a valid email address.','error');}else if(e.code==='auth/too-many-requests'){setTransientMessage(message,'Too many attempts. Please wait a little and try again.','error');}else if(e.code==='auth/operation-not-allowed'){setTransientMessage(message,'Password reset is not enabled. Admin must enable Email/Password sign-in in Firebase Authentication.','error',6000);}else{setTransientMessage(message,'Could not send reset email: '+firebaseError(e),'error',5000);}}finally{btn.disabled=false;}};
+$('registerBtn').onclick=async()=>{
+ const name=$('regName').value.trim(),email=$('regEmail').value.trim(),password=$('regPassword').value,ref=$('regReferral').value.trim();
+ if(!name||!email||password.length<6){msg('Enter name, valid Gmail and password (at least 6 characters).');return;}
+ const btn=$('registerBtn');btn.disabled=true;authFlowBusy=true;
+ let cred=null;
+ try{
+  // Create Auth account first so referral lookup is performed as an authenticated user.
+  cred=await auth.createUserWithEmailAndPassword(email,password);
+  // Referral directory is public-read by the Firestore rules. Do not query
+  // the private users collection here: its list permission is admin-only.
+  const referralDirectory=db.collection('publicReferrals');
+  const count=await referralDirectory.limit(1).get();
+  let referrer=null;
+  if(!count.empty){
+   if(!ref)throw new Error('Referral code is required for new registrations.');
+   const q=await referralDirectory.where('code','==',ref).limit(1).get();
+   if(q.empty)throw new Error('Invalid referral code.');
+   referrer=q.docs[0].data().uid;
+  }else if(ref){throw new Error('First user should leave referral code blank.');}
+  const code='SY'+cred.user.uid.slice(0,8).toUpperCase();
+  const batch=db.batch();
+  batch.set(db.collection('users').doc(cred.user.uid),{
+   name,email,referralCode:code,referredBy:referrer,status:'pending',
+   createdAt:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  batch.set(referralDirectory.doc(code),{uid:cred.user.uid,code});
+  // Public team directory: publicMembers is readable by members under the existing rules.
+  batch.set(db.collection('publicMembers').doc(cred.user.uid),{
+   uid:cred.user.uid,name,referralCode:code,referredBy:referrer
+  });
+  // One reward record per referred account; a fixed document ID prevents duplicates.
+  if(referrer){
+   batch.set(db.collection('referralRewards').doc(cred.user.uid),{
+    referrerUid:referrer,referredUid:cred.user.uid,amount:100,status:'pending',
+    createdAt:firebase.firestore.FieldValue.serverTimestamp(),creditedAt:null
+   });
+  }
+  await batch.commit();
+  await auth.signOut();
+  $('regPassword').value='';msg('Registration successful. Your account is pending payment verification. You can now log in with the same Gmail and password.');
+ }catch(e){
+  const message=firebaseError(e);
+  if(cred){try{await cred.user.delete();}catch(cleanErr){console.warn('Could not remove incomplete Auth account:',cleanErr);}}
+  msg(message);
+ }finally{authFlowBusy=false;btn.disabled=false;}
+};
+async function loadUserAnnouncement(){const box=$('userAnnouncement');try{const snap=await db.collection('publicSettings').doc('general').get();const text=snap.exists?String((snap.data()||{}).announcement||'').trim():'';if(text){$('userAnnouncementText').textContent=text;box.classList.remove('hidden');}else{box.classList.add('hidden');$('userAnnouncementText').textContent='';}}catch(e){box.classList.add('hidden');console.warn('Announcement could not load. Publish publicSettings/general read access in Firestore Rules.');}}
+function firebaseError(e){const map={'auth/email-already-in-use':'This Gmail is already registered.','auth/invalid-email':'Please enter a valid Gmail address.','auth/weak-password':'Password must be at least 6 characters.','auth/user-not-found':'Account not found.','auth/wrong-password':'Incorrect password.','auth/invalid-credential':'Incorrect Gmail or password.','permission-denied':'Firestore rules denied this action. Check the published Firestore rules.'};return map[e.code]||e.message||'Something went wrong.';}
+auth.onAuthStateChanged(async user=>{
+ if(authFlowBusy)return;
+ currentUser=user;isAdmin=false;currentProfile=null;$('loginBtn').disabled=false;
+ if(!user){document.querySelectorAll('.is-loading').forEach(b=>b.classList.remove('is-loading'));$('adminSettingsLogout').disabled=false;$('adminSettingsLogout').classList.remove('is-loading');$('adminLoginBtn').classList.remove('is-loading');isAdmin=false;adminSessionAuthorized=false;$('nav').style.display='none';$('adminNav').classList.add('hidden');$('adminContent').classList.add('hidden');$('adminBottomNav').classList.add('hidden');document.body.classList.remove('admin-mode');$('adminLoginBtn').disabled=false;$('loginBtn').disabled=false;showPaymentFormState();showPage('access');return;}
+ try{
+  const adminRef=db.collection('admins').doc(user.uid);
+  const adminSnap=await adminRef.get();
+  const adminData=adminSnap.exists?(adminSnap.data()||{}):{};
+  const enabledValue=adminData.enabled;
+  isAdmin=adminSnap.exists&&enabledValue===true;
+  if(adminModeRequested&&!isAdmin){adminModeRequested=false;adminSessionAuthorized=false;setTransientMessage($('adminLoginMessage'),'Invalid Gmail or Password','error');await auth.signOut();$('adminLoginBtn').disabled=false;return;}
+  if(isAdmin&&!adminModeRequested){
+   // Firebase may restore a previous admin session after refresh. Never open the dashboard automatically.
+   // Require a fresh, explicit Admin Login action for every page load.
+   adminSessionAuthorized=false;isAdmin=false;currentUser=null;
+   $('nav').style.display='none';$('adminNav').classList.add('hidden');$('adminContent').classList.add('hidden');$('adminBottomNav').classList.add('hidden');document.body.classList.remove('admin-mode');
+   $('adminLoginBtn').disabled=false;showPage('access');await auth.signOut();return;
+  }
+  if(isAdmin&&adminModeRequested){adminSessionAuthorized=true;adminModeRequested=false;setTransientMessage($('adminLoginMessage'),'Admin login successful.','success');$('adminLoginBtn').disabled=false;$('nav').style.display='flex';$('adminNav').classList.remove('hidden');$('adminMessage').textContent='Administrator access verified.';$('adminContent').classList.remove('hidden');$('adminBottomNav').classList.remove('hidden');document.body.classList.add('admin-mode');await loadPageImages();showPage('admin');showAdminSection('payments');loadAdmin();loadVideos();loadAdminSettings();return;}
+  const snap=await db.collection('users').doc(user.uid).get();
+  if(snap.exists)currentProfile=snap.data();
+  $('nav').style.display='flex';
+  await loadPageImages();
+  if(!currentProfile){$('nav').style.display='none';showPage('access');msg('Firebase Authentication login succeeded, but this account has no users/'+user.uid+' profile document. Firestore Rules or an incomplete registration caused this. Ask admin to repair the user document; do not register again with this Gmail.');return;}
+  await loadUserAnnouncement();
+  if(currentProfile.status==='blocked'){await auth.signOut();msg('This account is blocked. Contact Help Center.');return;}
+  if(currentProfile.status!=='active'&&!isAdmin){$('nav').style.display='none';$('nav').querySelector('[data-page="pending"]').classList.remove('hidden');await showPaymentStateForUser();showPage('pending');return;}
+  $('nav').style.display='flex';$('nav').querySelector('[data-page="pending"]').classList.add('hidden');$('profileName').value=currentProfile.name||'';$('profileName').readOnly=true;$('profileEmail').textContent=user.email||'';$('editProfileName').classList.remove('hidden');$('saveProfile').classList.add('hidden');$('cancelProfileName').classList.add('hidden');
+  $('homeWelcome').textContent='Welcome, '+(currentProfile.name||'Member');
+  $('myCode').textContent=currentProfile.referralCode||'Not assigned';
+  showPage('home');loadTeam();loadHistory();loadMyPaymentRequests();loadWallet();
+ }catch(e){$('nav').style.display='none';showPage('access');msg('Unable to sign in right now. Please try again.');if(adminModeRequested){setTransientMessage($('adminLoginMessage'),'Invalid Gmail or Password','error');$('adminLoginBtn').disabled=false;adminModeRequested=false;}adminSessionAuthorized=false;}
+});
+$('copyNo').onclick=()=>{if(navigator.clipboard?.writeText){navigator.clipboard.writeText('03329305255').then(()=>$('payMessage').textContent='UPaisa number copied.').catch(()=>{$('payMessage').textContent='Please copy 03329305255 manually.';});}else{$('payMessage').textContent='Please copy 03329305255 manually.';}};
+$('submitPayment').onclick=async()=>{
+ if(!currentUser||!currentProfile)return;
+ const receiptNumber=$('receiptNumber').value.trim();
+ const amount=Number($('paymentAmount').value);
+ const method=$('paymentMethod').value;
+ if(!receiptNumber){$('payMessage').textContent='Please enter your receipt / transaction number.';return;}
+ if(!Number.isFinite(amount)||amount<=0){$('payMessage').textContent='Please enter a valid amount.';return;}
+ const btn=$('submitPayment');btn.disabled=true;
+ try{
+  const request={uid:currentUser.uid,name:currentProfile.name||'',email:currentUser.email||'',receiptNumber,amount,method,paymentTo:'03329305255',accountHolder:'HABIBULLAH',status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  await db.collection('paymentRequests').add(request);
+  showPaymentPendingState();
+  const waText='Syabi\'s.com payment verification request\nName: '+(currentProfile.name||'Member')+'\nGmail: '+(currentUser.email||'')+'\nAmount: Rs. '+amount+'\nMethod: '+method+'\nTransaction ID: '+receiptNumber;
+  window.location.href='https://wa.me/923185493413?text='+encodeURIComponent(waText);
+ }catch(e){$('payMessage').textContent=firebaseError(e);btn.disabled=false;}
+};
+function showPaymentPendingState(){
+ $('paymentFormArea').classList.add('hidden');
+ const state=$('paymentPendingState');state.classList.remove('hidden');state.style.display='flex';$('submitPayment').disabled=false;
+}
+function showPaymentFormState(){
+ $('paymentPendingState').classList.add('hidden');$('paymentPendingState').style.display='none';
+ $('paymentFormArea').classList.remove('hidden');
+}
+async function showPaymentStateForUser(){
+ showPaymentFormState();
+ try{
+  const q=await db.collection('paymentRequests').where('uid','==',currentUser.uid).get();
+  const hasPending=q.docs.some(d=>(d.data().status||'pending')==='pending');
+  if(hasPending)showPaymentPendingState();
+ }catch(e){console.warn('Could not check payment status:',e);}
+}
+async function loadTeam(){
+ try{
+  const q=await db.collection('publicMembers').where('referredBy','==',currentUser.uid).get();
+  if(q.empty){$('teamMembers').innerHTML='<div class="history-empty">No team members yet.</div>';return;}
+  $('teamMembers').innerHTML=q.docs.map(d=>{const m=d.data()||{},uid=d.id,name=esc(m.name||'Member');return `<article class="member-card"><button type="button" class="member-card-toggle" aria-expanded="false" onclick="toggleMemberDetails('teamDetail_${uid}',this)"><span class="member-avatar">👤</span><span class="member-card-name">${name}</span><span class="member-chevron">＋</span></button><div class="member-card-details hidden" id="teamDetail_${uid}"><div class="member-detail-line">Total Earnings: <span id="teamEarn_${uid}">Loading…</span></div></div></article>`;}).join('');
+  // Show only each member's credited referral earnings in their expanded details.
+  for(const d of q.docs){const uid=d.id;try{const rewards=await db.collection('referralRewards').where('referrerUid','==',uid).where('status','==','credited').get();let total=0;rewards.forEach(r=>total+=Number((r.data()||{}).amount)||0);const out=$('teamEarn_'+uid);if(out)out.textContent=moneyRs(total);}catch(err){const out=$('teamEarn_'+uid);if(out)out.textContent='Unable to load';}}
+ }catch(e){$('teamMembers').textContent=firebaseError(e);}
+}
+window.toggleMemberDetails=(id,button)=>{const box=$(id);if(!box)return;const open=box.classList.contains('hidden');box.classList.toggle('hidden',!open);button.setAttribute('aria-expanded',String(open));};
+window.toggleAdminUserDetails=(id,button)=>{const box=$('adminUserDetail_'+id);if(!box)return;const open=box.classList.contains('hidden');box.classList.toggle('hidden',!open);button.setAttribute('aria-expanded',String(open));};
+function moneyRs(n){return 'Rs. '+(Number(n)||0).toLocaleString('en-PK',{maximumFractionDigits:2});}
+async function loadWallet(){
+ if(!currentUser)return;
+ $('walletStatsMessage').textContent='Loading wallet earnings…';
+ try{
+  const walletSnap=await db.collection('wallets').doc(currentUser.uid).get();
+  const balance=walletSnap.exists?Number((walletSnap.data()||{}).balance)||0:0;
+  $('walletBalance').textContent=moneyRs(balance);
+  // Earnings are referral rewards actually credited to this wallet.
+  const rewards=await db.collection('referralRewards').where('referrerUid','==',currentUser.uid).where('status','==','credited').get();
+  const now=new Date();
+  const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  const weekStart=now.getTime()-7*24*60*60*1000;
+  const monthStart=now.getTime()-30*24*60*60*1000;
+  let today=0,week=0,month=0;
+  rewards.forEach(doc=>{
+   const r=doc.data()||{};
+   const ts=r.creditedAt||r.createdAt;
+   const date=ts&&typeof ts.toDate==='function'?ts.toDate():null;
+   if(!date)return;
+   const time=date.getTime(),amount=Number(r.amount)||0;
+   if(time>=todayStart&&time<=now.getTime())today+=amount;
+   if(time>=weekStart&&time<=now.getTime())week+=amount;
+   if(time>=monthStart&&time<=now.getTime())month+=amount;
+  });
+  $('earnToday').textContent=moneyRs(today);
+  $('earnWeek').textContent=moneyRs(week);
+  $('earnMonth').textContent=moneyRs(month);
+  $('walletStatsMessage').textContent='Earnings show referral rewards credited today / within the last 7 and 30 days.';
+ }catch(e){
+  $('walletStatsMessage').textContent='Wallet earnings could not load: '+firebaseError(e)+' Check referralRewards read permission for your referrer UID.';
+ }
+}
+$('copyReferral').onclick=()=>navigator.clipboard?.writeText($('myCode').textContent);
+$('openWithdrawHistory').onclick=async()=>{$('withdrawHistoryView').classList.remove('hidden');$('openWithdrawHistory').classList.add('hidden');$('withdrawHistoryView').scrollIntoView({behavior:'smooth',block:'start'});await loadHistory();};
+$('backWallet').onclick=()=>{$('withdrawHistoryView').classList.add('hidden');$('openWithdrawHistory').classList.remove('hidden');$('wallet').scrollIntoView({behavior:'smooth',block:'start'});};
+$('withdrawBtn').onclick=async()=>{
+ const amount=Number($('withdrawAmount').value);
+ if(amount<100||amount>300||!$('withdrawAccount').value.trim()||!$('withdrawHolder').value.trim()){$('withdrawMessage').textContent='Enter valid details and amount Rs. 100–300.';return;}
+ const btn=$('withdrawBtn');btn.disabled=true;try{await db.collection('withdrawalRequests').add({uid:currentUser.uid,email:currentUser.email,name:currentProfile.name,amount,method:$('withdrawMethod').value,accountNumber:$('withdrawAccount').value.trim(),accountHolder:$('withdrawHolder').value.trim(),status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp(),expiresAt:firebase.firestore.Timestamp.fromDate(new Date(Date.now()+30*24*60*60*1000))});$('withdrawMessage').textContent='Withdrawal request submitted as Pending. Amount will be deducted only if Admin approves.';loadHistory();}
+ catch(e){$('withdrawMessage').textContent=firebaseError(e);}finally{btn.disabled=false;}
+};
+async function loadMyPaymentRequests(){if(!currentUser)return;try{const q=await db.collection('paymentRequests').where('uid','==',currentUser.uid).get();$('myPaymentRequests').innerHTML=q.empty?'No requests yet.':q.docs.map(d=>{const x=d.data();return `<div class="card"><b>${esc(x.status||'pending')}</b><p>Receipt: ${esc(x.receiptNumber||'')}</p>${x.rejectionReason?'<p class="notice">Admin message: '+esc(x.rejectionReason)+'</p>':''}</div>`}).join('');}catch(e){$('myPaymentRequests').textContent='Unable to load requests.';}}
+function historyDate(value){try{const d=value&&typeof value.toDate==='function'?value.toDate():null;return d?d.toLocaleString('en-PK',{dateStyle:'medium',timeStyle:'short'}):'Date not available';}catch(e){return 'Date not available';}}
+async function loadHistory(){if(!currentUser)return;const box=$('withdrawHistory');box.innerHTML='<div class="history-empty">Loading your withdrawal requests…</div>';try{const q=await db.collection('withdrawalRequests').where('uid','==',currentUser.uid).get();if(q.empty){box.innerHTML='<div class="history-empty">✨ No withdrawal requests yet.<br>Your requests will appear here.</div>';return;}const cutoff=Date.now()-30*24*60*60*1000;const recentDocs=q.docs.filter(d=>{const t=d.data().createdAt;return t&&t.toDate&&t.toDate().getTime()>=cutoff;});if(!recentDocs.length){box.innerHTML='<div class="history-empty">No withdrawal requests from the last 30 days.</div>';return;}const docs=recentDocs.slice().sort((a,b)=>{const av=a.data().createdAt,bv=b.data().createdAt;const at=av&&av.toDate?av.toDate().getTime():0,bt=bv&&bv.toDate?bv.toDate().getTime():0;return bt-at;});box.innerHTML=docs.map(d=>{const x=d.data(),status=String(x.status||'pending').toLowerCase();return `<article class="withdrawal-item"><div class="withdrawal-item-top"><div class="withdrawal-amount">${moneyRs(x.amount)}</div><span class="withdrawal-status ${esc(status)}">${esc(status)}</span></div><div class="withdrawal-meta"><div><b>Payment:</b> ${esc(x.method||'—')}</div><div><b>Account:</b> ${esc(x.accountNumber||'—')}</div><div><b>Account Holder:</b> ${esc(x.accountHolder||'—')}</div><div><b>Requested:</b> ${esc(historyDate(x.createdAt))}</div>${x.rejectionReason?'<div><b>Admin Note:</b> '+esc(x.rejectionReason)+'</div>':''}</div></article>`;}).join('');}catch(e){box.innerHTML='<div class="history-empty">'+esc(firebaseError(e))+'</div>';}}
+$('editProfileName').onclick=()=>{$('profileName').readOnly=false;$('profileName').focus();$('editProfileName').classList.add('hidden');$('saveProfile').classList.remove('hidden');$('cancelProfileName').classList.remove('hidden');};
+$('cancelProfileName').onclick=()=>{$('profileName').value=currentProfile?.name||'';$('profileName').readOnly=true;$('editProfileName').classList.remove('hidden');$('saveProfile').classList.add('hidden');$('cancelProfileName').classList.add('hidden');};
+$('saveProfile').onclick=async()=>{const newName=$('profileName').value.trim();if(!newName){alert('Please enter your name.');return;}const btn=$('saveProfile');btn.disabled=true;try{await db.collection('users').doc(currentUser.uid).update({name:newName});currentProfile.name=newName;$('homeWelcome').textContent='Welcome, '+newName;$('profileName').readOnly=true;$('editProfileName').classList.remove('hidden');$('saveProfile').classList.add('hidden');$('cancelProfileName').classList.add('hidden');alert('Name updated successfully.');}catch(e){alert(firebaseError(e));}finally{btn.disabled=false;}};
+function toggleProfileAccordion(toggleId,contentId){const toggle=$(toggleId),content=$(contentId);toggle.onclick=()=>{const opening=content.classList.contains('hidden');content.classList.toggle('hidden',!opening);toggle.setAttribute('aria-expanded',String(opening));toggle.querySelector('.accordion-chevron').textContent=opening?'−':'＋';};}
+toggleProfileAccordion('aboutToggle','aboutContent');toggleProfileAccordion('helpToggle','helpContent');
+async function loadAdmin(){
+ if(!isAdmin)return;
+ try{
+  const [p,w,u,r,pa]=await Promise.all([
+   db.collection('paymentRequests').where('status','==','pending').get(),
+   db.collection('withdrawalRequests').get(),db.collection('users').get(),
+   db.collection('referralRewards').get(),db.collection('paymentRequests').where('status','==','approved').get()
+  ]);
+  const rewardTotals={};r.docs.forEach(d=>{const x=d.data()||{},uid=x.referrerUid;if(!uid)return;const amount=Number(x.amount)||0;rewardTotals[uid]||(rewardTotals[uid]={total:0,pending:0});rewardTotals[uid].total+=amount;if((x.status||'pending')==='pending')rewardTotals[uid].pending+=amount;});
+  $('paymentRequests').innerHTML=p.empty?'No pending payment requests.':p.docs.map(d=>{let x=d.data();return `<div class="card"><b>${esc(x.name||'Member')} — ${esc(x.email||'')}</b><p>Receipt No: ${esc(x.receiptNumber||'Not provided')}</p><p>${moneyRs(x.amount)} • ${esc(x.method||'')} • Pending</p><p class="muted">Submitted payment to ${esc(x.paymentTo||'03329305255')}</p><button class="btn" onclick="adminPayment('${d.id}','active')">Approve Account</button><button class="btn secondary" onclick="adminPayment('${d.id}','rejected')">Reject</button></div>`;}).join('');
+  $('approvedPayments').innerHTML=pa.empty?'No approved payments yet.':pa.docs.map(d=>{const x=d.data()||{},dt=x.reviewedAt&&x.reviewedAt.toDate?x.reviewedAt.toDate():null;return `<button class="approved-name-btn" type="button" onclick="toggleApprovedDetail('paymentDetail_${d.id}',this)">✓ ${esc(x.name||'Member')} <span class="muted">— tap for details</span></button><div class="approved-detail hidden" id="paymentDetail_${d.id}"><b>User:</b> ${esc(x.name||'—')}<br><b>Gmail:</b> ${esc(x.email||'—')}<br><b>Approved:</b> ${dt?esc(dt.toLocaleDateString()+' '+dt.toLocaleTimeString()):'Time not recorded'}<br><b>Amount:</b> ${moneyRs(x.amount)}<br><b>Payment method:</b> ${esc(x.method||'—')}</div>`;}).join('');
+  const pendingW=w.docs.filter(d=>(d.data().status||'pending')==='pending');
+  const approvedW=w.docs.filter(d=>(d.data().status||'')==='approved');
+  $('adminWithdrawals').innerHTML=!pendingW.length?'No pending withdrawal requests.':pendingW.map(d=>{let x=d.data();return `<div class="card"><b>${esc(x.name||'Member')} (${esc(x.email||'')})</b><p>${moneyRs(x.amount)} • ${esc(x.method||'')}</p><p><b>Account:</b> ${esc(x.accountNumber||'—')}</p><p><b>Holder:</b> ${esc(x.accountHolder||'—')}</p><button class="btn" onclick="adminWithdrawal('${d.id}','approved')">Approve & Deduct</button><button class="btn secondary" onclick="adminWithdrawal('${d.id}','rejected')">Reject</button></div>`;}).join('');
+  $('approvedWithdrawals').innerHTML=!approvedW.length?'No approved withdrawals yet.':approvedW.map(d=>{const x=d.data()||{},dt=x.reviewedAt&&x.reviewedAt.toDate?x.reviewedAt.toDate():null;return `<button class="approved-name-btn" type="button" onclick="toggleApprovedDetail('withdrawDetail_${d.id}',this)">✓ ${esc(x.name||'Member')} <span class="muted">— tap for details</span></button><div class="approved-detail hidden" id="withdrawDetail_${d.id}"><b>User:</b> ${esc(x.name||'—')}<br><b>Gmail:</b> ${esc(x.email||'—')}<br><b>Date & time:</b> ${dt?esc(dt.toLocaleDateString()+' '+dt.toLocaleTimeString()):'Time not recorded'}<br><b>Withdrawn:</b> ${moneyRs(x.amount)}<br><b>Method:</b> ${esc(x.method||'—')}<br><b>Account number:</b> ${esc(x.accountNumber||'—')}<br><b>Account holder:</b> ${esc(x.accountHolder||'—')}</div>`;}).join('');
+  $('adminUsers').innerHTML=u.empty?'No users found.':u.docs.map(d=>{let x=d.data();const blocked=x.status==='blocked',rw=rewardTotals[d.id]||{total:0,pending:0};return `<article class="member-card"><button type="button" class="member-card-toggle" aria-expanded="false" onclick="toggleAdminUserDetails('${d.id}',this)"><span class="member-avatar">👤</span><span class="member-card-name">${esc(x.name||'Member')}</span><span class="member-chevron">＋</span></button><div class="member-card-details admin-user-details hidden" id="adminUserDetail_${d.id}"><p><b>Gmail:</b> ${esc(x.email||'Not available')}</p><p><b>Status:</b> ${esc(x.status||'pending')}</p><p><b>Referral Rewards:</b> ${moneyRs(rw.total)}</p><p class="muted">Pending verification: ${moneyRs(rw.pending)}</p><button class="btn ${blocked?'':'secondary'} admin-action" onclick="adminToggleUser('${d.id}','${blocked?'unblock':'block'}')">${blocked?'Unblock':'Block'} User</button></div></article>`;}).join('');
+  document.querySelectorAll('#adminContent .is-loading').forEach(b=>b.classList.remove('is-loading'));
+ }catch(e){$('adminMessage').textContent='Could not load admin data: '+firebaseError(e);}
+}
+window.toggleApprovedDetail=(id,btn)=>{const el=$(id);if(!el)return;el.classList.toggle('hidden');btn.setAttribute('aria-expanded',String(!el.classList.contains('hidden')));};
+window.adminPayment=async(id,status)=>{
+ if(!isAdmin)return;
+ let rejectionReason='';if(status==='rejected'){rejectionReason=await appPrompt('Enter a reason/message for rejecting this payment request:')||'';if(!rejectionReason.trim()){alert('A rejection reason is required.');return;}}
+ const label=status==='active'?'approve and activate this account':'reject this payment request';
+ if(!await appConfirm('Are you sure you want to '+label+'?'))return;
+ try{
+  const ref=db.collection('paymentRequests').doc(id);
+  await db.runTransaction(async tx=>{
+   const req=await tx.get(ref);if(!req.exists)throw new Error('Payment request not found.');
+   const data=req.data();if(data.status!=='pending')throw new Error('This request is no longer pending.');
+   let rewardRef=null,reward=null,walletRef=null,walletSnap=null;
+   if(status==='active'){
+    rewardRef=db.collection('referralRewards').doc(data.uid);
+    const rewardSnap=await tx.get(rewardRef);
+    if(rewardSnap.exists){
+     reward=rewardSnap.data()||{};
+     if(reward.referredUid===data.uid&&reward.referrerUid&&reward.status==='pending'){
+      walletRef=db.collection('wallets').doc(reward.referrerUid);
+      walletSnap=await tx.get(walletRef);
+     }else{reward=null;}
+    }
+   }
+   // All transaction reads are completed before any writes.
+   tx.update(ref,{status:status==='active'?'approved':'rejected',rejectionReason:rejectionReason,reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid});
+   if(status==='active'){
+    tx.update(db.collection('users').doc(data.uid),{status:'active',approvedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    if(reward&&walletRef&&walletSnap){
+     const current=walletSnap.exists?Number((walletSnap.data()||{}).balance)||0:0;
+     const amount=Number(reward.amount)||100;
+     tx.set(walletRef,{uid:reward.referrerUid,balance:current+amount,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+     tx.update(rewardRef,{status:'credited',creditedAt:firebase.firestore.FieldValue.serverTimestamp(),creditedBy:currentUser.uid});
+    }
+   }
+  });
+  $('adminMessage').textContent='Payment request updated. Refreshing list…';await loadAdmin();
+ }catch(e){$('adminMessage').textContent='Could not update request: '+firebaseError(e);}
+};
+window.adminWithdrawal=async(id,status)=>{
+ if(!isAdmin)return;
+ const ref=db.collection('withdrawalRequests').doc(id);
+ const rejecting=status==='rejected';
+ const reason=rejecting?(await appPrompt('Enter rejection reason:')||''):'';
+ if(rejecting&&!reason.trim()){alert('A reason is required.');return;}
+ if(!await appConfirm(rejecting?'Reject this withdrawal? No money will be deducted.':'Approve this withdrawal and deduct the amount from the user wallet?'))return;
+ try{
+  await db.runTransaction(async tx=>{
+   const reqSnap=await tx.get(ref);
+   if(!reqSnap.exists)throw new Error('Withdrawal request not found.');
+   const req=reqSnap.data()||{};
+   if((req.status||'pending')!=='pending')throw new Error('This request has already been reviewed.');
+   const amount=Number(req.amount);
+   if(!Number.isFinite(amount)||amount<=0)throw new Error('Invalid withdrawal amount.');
+   if(rejecting){
+    tx.update(ref,{status:'rejected',adminReason:reason,reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid});
+    return;
+   }
+   if(!req.uid)throw new Error('Request is missing the user UID.');
+   const walletRef=db.collection('wallets').doc(req.uid);
+   const walletSnap=await tx.get(walletRef);
+   if(!walletSnap.exists)throw new Error('User wallet does not exist.');
+   const wallet=walletSnap.data()||{};
+   const balance=Number(wallet.balance)||0;
+   if(balance<amount)throw new Error('Insufficient wallet balance. Current balance: Rs. '+balance);
+   // Atomic operation: wallet deduction and request approval happen together.
+   tx.update(walletRef,{balance:balance-amount,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+   tx.update(ref,{status:'approved',adminReason:'',reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid,deductedAmount:amount,deductedAt:firebase.firestore.FieldValue.serverTimestamp()});
+  });
+  $('adminMessage').textContent=rejecting?'Withdrawal rejected. Wallet was not deducted.':'Withdrawal approved. Rs. '+Number((await ref.get()).data().amount)+' deducted from the user wallet.';
+  await loadAdmin();
+ }catch(e){$('adminMessage').textContent='Could not process withdrawal: '+firebaseError(e);}
+};
+
+// Admin dashboard navigation and management tools.
+document.addEventListener('click',ev=>{const b=ev.target.closest('#adminContent button');if(!b||b.id==='adminSettingsLogout'||b.matches('[data-admin]')||b.classList.contains('member-card-toggle')||b.classList.contains('approved-name-btn'))return;b.classList.add('is-loading');setTimeout(()=>b.classList.remove('is-loading'),10000);});
+function showAdminSection(key){if(!isAdmin)return;document.querySelectorAll('.admin-panel-section').forEach(el=>el.classList.add('hidden'));const target=$('adm-'+key);if(target)target.classList.remove('hidden');document.querySelectorAll('#adminBottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.admin===key));}
+document.querySelectorAll('#adminBottomNav button').forEach(b=>b.onclick=()=>showAdminSection(b.dataset.admin));
+window.adminToggleUser=async(uid,action)=>{if(!isAdmin)return;const password=await appPrompt('For security, enter your current admin password:');if(!password)return;try{const credential=firebase.auth.EmailAuthProvider.credential(currentUser.email,password);await currentUser.reauthenticateWithCredential(credential);const ref=db.collection('users').doc(uid);const snap=await ref.get();if(!snap.exists)throw new Error('User not found');const data=snap.data()||{};const next=action==='block'?'blocked':(data.previousStatus||'active');await ref.update(action==='block'?{status:'blocked',previousStatus:data.status||'pending'}:{status:next,previousStatus:firebase.firestore.FieldValue.delete()});$('adminMessage').textContent='User status updated.';await loadAdmin();}catch(e){alert('Could not update user. Check password and Firestore permissions.');}};
+async function loadVideos(preselectId=''){if(!isAdmin)return;try{const q=await db.collection('videos').get();const docs=q.docs.map(d=>({id:d.id,...d.data()}));videoPlacementDocs=docs;$('videoLinks').innerHTML=q.empty?'No video links added yet.':docs.map(x=>`<div class="card"><b>${esc(x.buttonText||x.title||'YouTube Link')}</b><p class="muted">Admin title: ${esc(x.title||'Video')}</p><p class="muted">${x.placement?('Placed on '+escPageLabel(x.placement.page)):'Shown in the default video links area'}</p><p><a target="_blank" rel="noopener" href="${esc(x.url||'#')}">${esc(x.url||'')}</a></p><button class="btn secondary" onclick="editVideo('${x.id}')">Edit</button><button class="btn secondary" onclick="selectVideoPlacement('${x.id}')">📍 Place</button><button class="btn secondary" onclick="deleteVideo('${x.id}')">Delete</button></div>`).join('');const sel=$('videoPlaceSelect');if(sel){const previous=preselectId||sel.value;sel.innerHTML='<option value="">Select a YouTube link</option>'+docs.map(x=>`<option value="${esc(x.id)}">${esc(x.buttonText||x.title||'YouTube Link')}</option>`).join('');if(docs.some(x=>x.id===previous))sel.value=previous;else if(docs.length)sel.value=docs[0].id;}await renderVideoPlacementEditor();if(docs.length&&sel?.value)$('videoPlacementStatus').textContent='Link loaded in the editor. Drag the red button with your finger, then press Save Button Position.';}catch(e){$('videoLinks').textContent='Unable to load links: '+firebaseError(e);$('videoPlacementStatus').textContent='Could not load the links into the editor. Check Firestore permissions and try Refresh Links.';}}
+$('saveVideo').onclick=async()=>{if(!isAdmin)return;const title=$('videoTitle').value.trim(),buttonText=$('videoButtonText').value.trim(),url=$('videoUrl').value.trim();if(!title||!buttonText||!/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url)){$('videoMessage').textContent='Enter a video title, user button text and valid YouTube URL.';return;}try{const saved=await db.collection('videos').add({title,buttonText,url,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:currentUser.uid});$('videoTitle').value='';$('videoButtonText').value='';$('videoUrl').value='';$('videoMessage').textContent='YouTube button added. It is now selected below in the placement editor.';await loadVideos(saved.id);$('videoPlacementStage')?.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){$('videoMessage').textContent='Could not save link: '+firebaseError(e);}};
+window.deleteVideo=async(id)=>{if(!isAdmin||!await appConfirm('Delete this video link?'))return;try{await db.collection('videos').doc(id).delete();loadVideos();}catch(e){alert('Could not delete link. Check Firestore permissions.');}};
+window.editVideo=async(id)=>{if(!isAdmin)return;try{const ref=db.collection('videos').doc(id),snap=await ref.get(),x=snap.data()||{};const title=await appPrompt('Admin video title:',x.title||'');if(title===null)return;const buttonText=await appPrompt('Text shown on user YouTube button:',x.buttonText||x.title||'');if(buttonText===null)return;const url=await appPrompt('YouTube URL:',x.url||'');if(url===null)return;if(!/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url))throw new Error('Invalid YouTube URL');await ref.update({title:title.trim(),buttonText:buttonText.trim(),url:url.trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});loadVideos();}catch(e){alert('Could not update video link.');}};
+async function loadAdminSettings(){if(!isAdmin)return;try{const d=await db.collection('adminSettings').doc('general').get();if(d.exists){const x=d.data();$('siteAnnouncement').value=x.announcement||'';$('siteHelpNumber').value=x.helpNumber||'03185493413';$('adminVersion').value=x.adminVersion||'';$('footerVersion').textContent=x.adminVersion?' • '+x.adminVersion:'';const pub=await db.collection('publicSettings').doc('general').get();if(!pub.exists&&String(x.announcement||'').trim()){await db.collection('publicSettings').doc('general').set({announcement:String(x.announcement).trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});}}}catch(e){$('settingsMessage').textContent='Settings could not be loaded / published: '+firebaseError(e);}}
+$('saveAdminVersion').onclick=async()=>{if(!isAdmin)return;const v=$('adminVersion').value.trim();try{await db.collection('adminSettings').doc('general').set({adminVersion:v,versionUpdatedAt:firebase.firestore.FieldValue.serverTimestamp(),versionUpdatedBy:currentUser.uid},{merge:true});$('footerVersion').textContent=v?' • '+v:'';$('versionMessage').textContent='Version saved and shown in the page footer.';}catch(e){$('versionMessage').textContent='Could not save version: '+firebaseError(e);}};
+$('saveAdminSettings').onclick=async()=>{if(!isAdmin)return;try{const announcement=$('siteAnnouncement').value.trim();await db.collection('adminSettings').doc('general').set({announcement,helpNumber:$('siteHelpNumber').value.trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentUser.uid},{merge:true});await db.collection('publicSettings').doc('general').set({announcement,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});$('settingsMessage').textContent='Settings saved. Announcement is published on the user pages.';}catch(e){$('settingsMessage').textContent='Could not save/publish settings: '+firebaseError(e)+' Check publicSettings Firestore Rules.';}};
+$('adminSettingsLogout').onclick=async()=>{const btn=$('adminSettingsLogout');if(!isAdmin||!adminSessionAuthorized||!currentUser)return;if(!await appConfirm('Are you sure you want to log out of the Admin Panel?'))return;btn.classList.add('is-loading');btn.disabled=true;$('adminLogoutMessage').textContent='Logging out…';try{adminModeRequested=false;adminSessionAuthorized=false;isAdmin=false;await auth.signOut();$('adminLogoutMessage').textContent='You have been logged out.';showPage('access');}catch(e){$('adminLogoutMessage').textContent='Could not log out. Please try again.';}finally{btn.disabled=false;btn.classList.remove('is-loading');}};
+
+// Admin page-image editor: selected page preview, touch drag/resize, Firestore save.
+const editablePages=['access','pending','home','team','wallet','profile'];
+let pageImageRecords={}, activeImagePage='access', imageDrag=null, editorImageData=null;
+function applyPageImage(pageId,record){
+ const page=$(pageId);if(!page)return;
+ const old=page.querySelector('.admin-image-layer');if(old)old.remove();
+ if(!record||!record.dataUrl)return;
+ const layer=document.createElement('div');layer.className='admin-image-layer';layer.dataset.page=pageId;
+ layer.style.left=(record.x??5)+'%';layer.style.top=(record.y??5)+'%';layer.style.width=(record.w??35)+'%';layer.style.height=(record.h??180)+'px';
+ const img=document.createElement('img');img.src=record.dataUrl;img.alt='Page image';layer.appendChild(img);page.appendChild(layer);
+}
+function makeImageLayer(pageId,record){applyPageImage(pageId,record);}
+function renderImageEditor(){
+ const stage=$('imageEditorStage');if(!stage)return;stage.innerHTML='';
+ const label=document.createElement('div');label.className='editor-stage-label';label.innerHTML='<span>LIVE PREVIEW: '+escPageLabel(activeImagePage)+'</span><span>Drag image • Resize corner</span>';stage.appendChild(label);
+ const preview=document.createElement('div');preview.className='image-editor-preview';
+ const source=$(activeImagePage);if(source){const clone=source.cloneNode(true);clone.classList.add('active');clone.style.display='block';clone.style.position='relative';clone.style.width='100%';clone.style.minHeight='330px';clone.style.pointerEvents='none';clone.querySelectorAll('.admin-image-layer').forEach(n=>n.remove());clone.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));clone.querySelectorAll('button,input,select,a').forEach(n=>{n.disabled=true;n.tabIndex=-1;});preview.appendChild(clone);}stage.appendChild(preview);
+ const record=pageImageRecords[activeImagePage];if(record?.dataUrl||editorImageData){const data=editorImageData||record;const layer=document.createElement('div');layer.className='editor-image-layer';layer.dataset.page=activeImagePage;
+ layer.style.left=(data.x??5)+'%';layer.style.top=(data.y??5)+'%';layer.style.width=(data.w??45)+'%';layer.style.height=(data.h??180)+'px';layer.style.pointerEvents='auto';
+ const img=document.createElement('img');img.src=data.dataUrl;img.alt='Image to place';img.draggable=false;layer.appendChild(img);
+ const handle=document.createElement('span');handle.className='editor-resize-handle';handle.textContent='↘';handle.setAttribute('aria-label','Resize image');layer.appendChild(handle);preview.appendChild(layer);
+ const begin=(mode,e)=>{e.preventDefault();e.stopPropagation();const r=preview.getBoundingClientRect(),lr=layer.getBoundingClientRect();imageDrag={mode,layer,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,left:parseFloat(layer.style.left)||0,top:parseFloat(layer.style.top)||0,width:lr.width,height:lr.height,rect:r};try{stage.setPointerCapture(e.pointerId);}catch(_){};};
+ layer.addEventListener('pointerdown',e=>{if(e.target===handle)return;begin('move',e);});
+ handle.addEventListener('pointerdown',e=>begin('resize',e));
+ }
+}
+function escPageLabel(id){return ({access:'Login / Register',pending:'Payment Request',home:'Home',team:'My Team',wallet:'Wallet',profile:'Profile'})[id]||id;}
+document.addEventListener('pointermove',e=>{if(!imageDrag||e.pointerId!==imageDrag.pointerId)return;const d=imageDrag,dx=e.clientX-d.startX,dy=e.clientY-d.startY;if(d.mode==='move'){d.layer.style.left=Math.max(0,Math.min(100-d.layer.getBoundingClientRect().width/d.rect.width*100,d.left+dx/d.rect.width*100))+'%';d.layer.style.top=Math.max(0,Math.min(100-d.layer.getBoundingClientRect().height/d.rect.height*100,d.top+dy/d.rect.height*100))+'%';}else{const delta=Math.max(dx,dy);d.layer.style.width=Math.max(8,Math.min(98,(d.width+delta)/d.rect.width*100))+'%';d.layer.style.height=Math.max(40,Math.min(1000,d.height+delta))+'px';}e.preventDefault();},{passive:false});
+document.addEventListener('pointerup',e=>{if(imageDrag&&e.pointerId===imageDrag.pointerId)imageDrag=null;});document.addEventListener('pointercancel',e=>{if(imageDrag&&e.pointerId===imageDrag.pointerId)imageDrag=null;});
+async function loadPageImages(){try{const q=await db.collection('siteImages').get();pageImageRecords={};q.forEach(d=>{pageImageRecords[d.id]=d.data();});editablePages.forEach(id=>applyPageImage(id,pageImageRecords[id]));renderImageEditor();}catch(e){console.warn('Page images could not load:',e.message);}}
+function getEditorLayerRecord(pageId){const stage=$('imageEditorStage'),layer=stage?.querySelector('.editor-image-layer');if(!layer||layer.dataset.page!==pageId)return null;const preview=layer.parentElement,box=preview.getBoundingClientRect(),r=layer.getBoundingClientRect();return {...(pageImageRecords[pageId]||{}),dataUrl:editorImageData?.dataUrl||pageImageRecords[pageId]?.dataUrl,x:parseFloat(layer.style.left)||0,y:parseFloat(layer.style.top)||0,w:r.width/box.width*100,h:r.height};}
+$('imageTarget').onchange=()=>{activeImagePage=$('imageTarget').value;editorImageData=pageImageRecords[activeImagePage]||null;renderImageEditor();$('imageEditorStatus').textContent='Preview loaded for '+escPageLabel(activeImagePage)+'. Choose an image or move/resize the existing one.';};
+$('pageImageFile').onchange=async()=>{
+ if(!isAdmin){$('imageEditorStatus').textContent='Admin access required.';return;}const file=$('pageImageFile').files?.[0];if(!file)return;
+ if(!file.type.startsWith('image/')){$('imageEditorStatus').textContent='Please choose an image file.';return;}
+ try{const dataUrl=await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(file);});const img=new Image();img.src=dataUrl;await img.decode();
+ const scale=Math.min(1,1200/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+ let compressed=canvas.toDataURL('image/jpeg',0.72),quality=0.58;while(compressed.length>650000&&quality>0.25){compressed=canvas.toDataURL('image/jpeg',quality);quality-=0.08;}if(compressed.length>750000)throw new Error('Image is too large. Please choose a smaller image.');
+ editorImageData={...(pageImageRecords[activeImagePage]||{}),dataUrl:compressed,x:5,y:5,w:45,h:180};renderImageEditor();$('imageEditorStatus').textContent='Image ready in page preview. Drag it to the exact place and resize with the corner handle, then Save Layout.';
+ }catch(e){$('imageEditorStatus').textContent=e.message||'Could not read this image.';}
+};
+$('saveImageLayout').onclick=async()=>{if(!isAdmin)return;try{const id=activeImagePage,record=getEditorLayerRecord(id);if(!record?.dataUrl)throw new Error('Choose an image first.');await db.collection('siteImages').doc(id).set({...record,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentUser.uid});pageImageRecords[id]=record;editorImageData=record;applyPageImage(id,record);$('imageEditorStatus').textContent='Saved! The image position and size are now applied to '+escPageLabel(id)+'.';}catch(e){$('imageEditorStatus').textContent='Save failed: '+firebaseError(e);}};
+$('removePageImage').onclick=async()=>{if(!isAdmin)return;try{await db.collection('siteImages').doc(activeImagePage).delete();delete pageImageRecords[activeImagePage];editorImageData=null;applyPageImage(activeImagePage,null);renderImageEditor();$('imageEditorStatus').textContent='Image removed from '+escPageLabel(activeImagePage)+'.';}catch(e){$('imageEditorStatus').textContent='Remove failed: '+firebaseError(e);}};
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+// Touch-friendly YouTube button placement editor. Saved coordinates are relative to the selected user page.
+let videoPlacementDocs=[], videoPlacementDrag=null;
+window.selectVideoPlacement=async(id)=>{if(!isAdmin)return;$('videoPlaceSelect').value=id;const snap=await db.collection('videos').doc(id).get();const v=snap.data()||{};if(v.placement?.page)$('videoPlacePage').value=v.placement.page;renderVideoPlacementEditor();$('videoPlacementStatus').textContent='Drag the red button with your finger to position it, then press Save Button Position.';document.querySelector('.video-place-card')?.scrollIntoView({behavior:'smooth',block:'start'});};
+function getSelectedVideoDoc(){return videoPlacementDocs.find(v=>v.id===$('videoPlaceSelect')?.value)||null;}
+async function renderVideoPlacementEditor(){const stage=$('videoPlacementStage');if(!stage)return;stage.innerHTML='';const id=$('videoPlaceSelect').value,pageId=$('videoPlacePage').value;if(!id){stage.innerHTML='<div class="video-placement-hint">Select a saved YouTube link above to start placing it.</div>';return;}let video=getSelectedVideoDoc();try{if(!video){const snap=await db.collection('videos').doc(id).get();video={id,...(snap.data()||{})};videoPlacementDocs.push(video);}}catch(_){stage.textContent='Could not load selected link.';return;}const preview=document.createElement('div');preview.className='video-placement-preview';const source=$(pageId);if(source){const clone=source.cloneNode(true);clone.classList.add('active');clone.style.display='block';clone.style.position='absolute';clone.style.inset='0';clone.style.height='100%';clone.style.minHeight='0';clone.style.pointerEvents='none';clone.querySelectorAll('.admin-image-layer,.video-placement-overlay').forEach(n=>n.remove());clone.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));clone.querySelectorAll('button,input,select,a').forEach(n=>{n.disabled=true;n.tabIndex=-1;});preview.appendChild(clone);}const pos=video.placement?.page===pageId?video.placement:{x:5,y:70,w:48};const button=document.createElement('button');button.type='button';button.className='video-placement-drag';button.textContent='▶ '+(video.buttonText||video.title||'YouTube Link');button.style.left=(pos.x??5)+'%';button.style.top=(pos.y??70)+'%';button.style.width=(pos.w??48)+'%';button.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();const r=preview.getBoundingClientRect();videoPlacementDrag={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,left:parseFloat(button.style.left)||0,top:parseFloat(button.style.top)||0,rect:r,button};try{button.setPointerCapture(e.pointerId);}catch(_){}});preview.appendChild(button);stage.appendChild(preview);}
+$('videoPlaceSelect').onchange=()=>renderVideoPlacementEditor();$('videoPlacePage').onchange=()=>renderVideoPlacementEditor();
+document.addEventListener('pointermove',e=>{const d=videoPlacementDrag;if(!d||e.pointerId!==d.pointerId)return;const dx=e.clientX-d.startX,dy=e.clientY-d.startY;d.button.style.left=Math.max(0,Math.min(100-d.button.getBoundingClientRect().width/d.rect.width*100,d.left+dx/d.rect.width*100))+'%';d.button.style.top=Math.max(0,Math.min(100-d.button.getBoundingClientRect().height/d.rect.height*100,d.top+dy/d.rect.height*100))+'%';e.preventDefault();},{passive:false});
+document.addEventListener('pointerup',e=>{if(videoPlacementDrag&&e.pointerId===videoPlacementDrag.pointerId)videoPlacementDrag=null;});document.addEventListener('pointercancel',e=>{if(videoPlacementDrag&&e.pointerId===videoPlacementDrag.pointerId)videoPlacementDrag=null;});
+$('saveVideoPlacement').onclick=async()=>{if(!isAdmin)return;const id=$('videoPlaceSelect').value,button=$('videoPlacementStage').querySelector('.video-placement-drag'),preview=button?.parentElement;if(!id||!button||!preview){$('videoPlacementStatus').textContent='Select a link and place its button first.';return;}const box=preview.getBoundingClientRect(),r=button.getBoundingClientRect(),placement={page:$('videoPlacePage').value,x:Math.max(0,Math.min(100-r.width/box.width*100,parseFloat(button.style.left)||0)),y:Math.max(0,Math.min(100-r.height/box.height*100,parseFloat(button.style.top)||0)),w:r.width/box.width*100};try{await db.collection('videos').doc(id).update({placement,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});const v=videoPlacementDocs.find(x=>x.id===id);if(v)v.placement=placement;$('videoPlacementStatus').textContent='Saved! The YouTube button position is updated on the '+escPageLabel(placement.page)+' page.';loadVideos();}catch(e){$('videoPlacementStatus').textContent='Save failed: '+firebaseError(e);}};
+$('clearVideoPlacement').onclick=async()=>{if(!isAdmin)return;const id=$('videoPlaceSelect').value;if(!id)return;try{await db.collection('videos').doc(id).update({placement:firebase.firestore.FieldValue.delete(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});const v=videoPlacementDocs.find(x=>x.id===id);if(v)delete v.placement;$('videoPlacementStatus').textContent='Position removed. Link will return to the default YouTube links area.';loadVideos();}catch(e){$('videoPlacementStatus').textContent='Could not remove position: '+firebaseError(e);}};
+// Display Admin-added YouTube links on user pages with the custom button label.
+let userVideoUnsubscribe=null;
+function startUserVideoLinks(){if(userVideoUnsubscribe)return;userVideoUnsubscribe=db.collection('videos').onSnapshot(snapshot=>{
+ const docs=snapshot.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.url&&/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(v.url));videoPlacementDocs=docs;
+ ['userVideoLinksAccess','userVideoLinksHome'].forEach(id=>{const box=$(id);if(!box)return;box.innerHTML=docs.filter(v=>!v.placement).map(v=>`<a class="youtube-link-btn" href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.buttonText||v.title||'Watch on YouTube')}</a>`).join('');});
+ document.querySelectorAll('.video-placement-overlay').forEach(n=>n.remove());docs.filter(v=>v.placement?.page&&$(v.placement.page)).forEach(v=>{const page=$(v.placement.page),overlay=document.createElement('div');overlay.className='video-placement-overlay';overlay.dataset.videoId=v.id;const a=document.createElement('a');a.className='youtube-link-btn';a.href=v.url;a.target='_blank';a.rel='noopener';a.textContent=v.buttonText||v.title||'Watch on YouTube';a.style.left=(v.placement.x??5)+'%';a.style.top=(v.placement.y??70)+'%';a.style.width=(v.placement.w??48)+'%';overlay.appendChild(a);page.appendChild(overlay);});
+ const standardTitles=['How to Create an Account','How to Earn Money','How to Make a Team','How to Withdraw Money'];
+ ['howCreate','howEarn','howTeam','howWithdraw'].forEach((id,i)=>{const button=$(id);if(!button)return;const item=docs.find(v=>v.title===standardTitles[i]);if(item)button.textContent=item.buttonText||item.title;});
+},err=>console.warn('User YouTube links failed to load:',err.message));}
+startUserVideoLinks();
+['howCreate','howEarn','howTeam','howWithdraw'].forEach((id,i)=>$(id).onclick=async e=>{e.preventDefault();try{const titles=['How to Create an Account','How to Earn Money','How to Make a Team','How to Withdraw Money'];const q=await db.collection('videos').where('title','==',titles[i]).limit(1).get();if(q.empty){alert('Video is not available yet.');return;}window.open(q.docs[0].data().url,'_blank','noopener');}catch(err){alert('Video is not available right now.');}});
+</script>
+</body></html>
